@@ -24,8 +24,11 @@ export default class Home extends Component {
 				<div style={welcomeStyle}>
 					<h1>Home Screen</h1>
 				</div>
+				<div>
+					<p>Just a test for hoom page</p>
+				</div>
 			</div>
-		);
+		)
 	}
 
 	componentDidMount() {
