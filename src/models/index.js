@@ -1,0 +1,1 @@
+export LocationModel from './LocationModel'

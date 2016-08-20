@@ -3,7 +3,6 @@ import bodyParser from 'body-parser'
 import path from 'path'
 import { renderToString } from 'react-dom/server'
 import React from 'react'
-
 const app = express()
 app.use('/node_modules', express.static(path.join(__dirname, '../node_modules')))
 
@@ -68,6 +67,32 @@ process.on('uncaughtException', evt => {
 	console.log('uncaughtException: ', evt);
 });
 
-app.listen(3000, function(){
-	console.log('Listening on port 3000');
+
+app.listen(3000, () => {
+	console.log('Web Server Start...')
 });
+
+// init socket.io
+var server = require('http').createServer();
+var io = require('socket.io')(server);
+var port = 3001;
+server.listen(port , function () {
+  console.log('Server listening at port %d', port);
+});
+
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+
+
+io.on('connection', socket => {
+	console.log('Start Socket.io...');
+	setInterval(() => {
+			console.log("Send Location");
+			socket.emit('location', {
+				 lat: 99.99,
+				 lng: 11.11
+			 });
+		}, 2000);
+})

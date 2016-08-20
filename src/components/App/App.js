@@ -1,9 +1,11 @@
 import React ,{Component, PropTypes} from 'react'
-import {observer} from 'mobx-react'
+import {observer, Provider} from 'mobx-react'
 import DevTool from 'mobx-react-devtools'
 import Header from './Header'
 import Footer from './Footer'
 import {Paper} from 'material-ui'
+import {Locator} from '../'
+import {LocationStore} from '../../stores'
 
 const style = {
   height: 100,
@@ -15,23 +17,54 @@ const style = {
 
 @observer
 export default class App extends Component {
-	render() {
-    const {children} = this.props
-    // console.log('Test Children')
-    // console.log(children))
-		// const {todoStore, viewStore} = this.props;
-		return (
+  constructor () {
+    super()
+    this.store = new LocationStore()
+
+  }
+  componentDidMount () {
+    // console.log('Did mount..')
+  }
+  componentWillMount () {
+    // console.log('Will mount..')
+    // this.store.setLocation(107.21,15.02);
+    // this.store.setName('test');
+    // console.log(this.store);
+  }
+  renderChildren (props) {
+    return React.Children.map(props.children, child => {
+    if (child.type === Locator){
+      console.log("Test TESTTESTESTET")
+      return React.cloneElement(child, {
+        location: this.store,
+        childProp: "ei ei",
+        popop: "KKK"
+      })}
+    else{
+      console.type("Locator tYPE")
+      console.log(Locator)
+      return child
+    }
+  })
+  }
+	render () {
+    // console.log('Render..')
+    const {children} = this.props;
+    // <Provider location={this.store}>
+    //      {children}
+    // </Provider>
+    console.log('this store')
+    console.log(children)
+    return (
 				<div id='main'>
 					<DevTool />
 					<Header />
-					{children}
+          <Provider store={this.store}>
+            {children}
+          </Provider>
           <Footer />
 				</div>
 		);
-	}
-
-	componentDidMount() {
-
 	}
 }
 
