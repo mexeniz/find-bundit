@@ -19,6 +19,7 @@ const renderFullPage = () => {
 	<!doctype html>
 	<html lang="utf-8">
 		<head>
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWPkc97QJBhtdg6ZM8UgnOOkco3lgEXyw" ></script>
 		</head>
 		<body style="margin:0px;">
 			<div id="app" ></div>
@@ -84,15 +85,26 @@ function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
+const locationInterval = 5000;
+const activated = true ;
+let myLocation = {
+	name: "Mmarcl",
+	id: 1,
+	lat: 0.0,
+	lng: 0.0
+}
 
-
+console.log('Start Socket.io...');
 io.on('connection', socket => {
-	console.log('Start Socket.io...');
-	setInterval(() => {
-			console.log("Send Location");
-			socket.emit('location', {
-				 lat: 99.99,
-				 lng: 11.11
-			 });
-		}, 2000);
+	if (activated){
+		setInterval(() => {
+				console.log("Send Location");
+				socket.emit('location', myLocation);
+			}, locationInterval);
+	}
+	socket.on('update location', (location) => {
+		console.log('Recv location update..')
+		Object.assign(myLocation, location)
+		console.log(myLocation)
+	});
 })

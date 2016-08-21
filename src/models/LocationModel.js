@@ -3,7 +3,7 @@ import {observable} from 'mobx'
 export default class LocationModel {
 	store;
 	id;
-  name;
+  @observable name;
 	@observable lat;
 	@observable lng;
 
@@ -28,7 +28,12 @@ export default class LocationModel {
     this.lng = lng;
 		console.log(lat + '...' + lng)
 	}
-
+	setLat(lat) {
+		this.lat = lat
+	}
+	setLng(lng) {
+		this.lng = lng
+	}
 	toJS() {
 		return {
 			id: this.id,

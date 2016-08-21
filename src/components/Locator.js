@@ -1,45 +1,53 @@
-import React ,{Component} from 'react'
-import {observer, inject, autorun} from 'mobx-react'
-import io from 'socket.io-client'
+import React ,{Component, PropTypes} from 'react'
+import {TextField, RaisedButton} from 'material-ui';
+import {observer} from 'mobx-react'
 
-const HOST = 'http://localhost' ;
-const PORT = 3001 ;
-const socket = io(HOST.concat(':',PORT))
-
-@inject('store') @observer
+@observer
 class Locator extends Component {
-  constructor () {
-    super()
-    this.handleLocationMessage = this.handleLocationMessage.bind(this)
-    socket.on(`connection`, function (){
-			console.log('Connection...')
-    });
-		socket.on(`location`, data => {
-			console.log('Recv data...')
-      this.handleLocationMessage (data);
-      // console.log(this)
-      // this.props.store.location.lat = data.lat;
-      // this.props.store.location.lng = data.lng;
-      // this.render();
-    })
+  constructor(props) {
+    super(props);
+    this.onSubmitHandle = this.onSubmitHandle.bind(this)
+    this.onLatChangeHandle = this.onLatChangeHandle.bind(this)
+    this.onLngChangeHandle = this.onLngChangeHandle.bind(this)
+    }
+  onSubmitHandle () {
+    this.props.onLocationSubmit(this.props.location.lat,this.props.location.lng)
+    //return false;
   }
-  handleLocationMessage (data) {
-    this.props.store.setLocation(data.lat, data.lng)
+  onLatChangeHandle (event) {
+    this.props.location.setLat(event.target.value)
   }
-  componentDidMount () {
-
+  onLngChangeHandle (event) {
+    this.props.location.setLng(event.target.value)
   }
   render () {
-    const {store} = this.props;
-    console.log('..Location..')
-    console.log(this.props)
     return (
         <div id='locator' style={{textAlign : 'center'}}>
           Just a locator :0
-          <h1>{store.location.lat}</h1>
-          <h1>{store.location.lng}</h1>
+
+          <form>
+            <TextField
+              name="lat"
+              hintText="Latitude"
+              value={this.props.location.lat}
+              onChange={this.onLatChangeHandle}
+            /><br />
+            <br />
+            <TextField
+              name="lng"
+              hintText="Longitude"
+              value={this.props.location.lng}
+              onChange={this.onLngChangeHandle}
+            /><br />
+            <br />
+            <RaisedButton label="Submit" onClick={this.onSubmitHandle}  primary={true} style={{margin : "12px"}} />
+          </form>
         </div>
     )
   }
+}
+Locator.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  onLocationSubmit: PropTypes.func.isRequired
 }
 export default Locator

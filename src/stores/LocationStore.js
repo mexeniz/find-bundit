@@ -35,6 +35,12 @@ export default class LocationStore {
 	@action setLocation (lat, lng) {
 		this.location.setLocation(lat,lng)
 	}
+	@action setLat (lat) {
+		this.location.setLat(lat)
+	}
+	@action setLng (lng) {
+		this.location.setLng(lng)
+	}
 	toJS() {
 		return this.location.toJS();
 	}

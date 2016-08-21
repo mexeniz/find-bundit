@@ -4,7 +4,7 @@ import {
   App,
   Home
 } from './components'
-import {LocatorContainer} from './containers'
+import {LocatorContainer,MapContainer} from './containers'
 
 export default () => {
   return (
@@ -13,6 +13,7 @@ export default () => {
         <IndexRoute component={Home} />
         <Route path='home' component={Home} />
         <Route path='locator' component={LocatorContainer} />
+        <Route path='map' component={MapContainer} />
       </Route>
     </Router>
   )
