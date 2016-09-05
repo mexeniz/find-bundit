@@ -24,9 +24,8 @@ export default class LocationModel {
 	}
 
 	setLocation(lat,lng) {
-		this.lat = lat;
-    this.lng = lng;
-		console.log(lat + '...' + lng)
+		this.lng = parseFloat(lng);
+		this.lat = parseFloat(lat);
 	}
 	setLat(lat) {
 		this.lat = lat

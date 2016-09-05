@@ -6,48 +6,20 @@ import {observer} from 'mobx-react'
 class Locator extends Component {
   constructor(props) {
     super(props);
-    this.onSubmitHandle = this.onSubmitHandle.bind(this)
-    this.onLatChangeHandle = this.onLatChangeHandle.bind(this)
-    this.onLngChangeHandle = this.onLngChangeHandle.bind(this)
-    }
-  onSubmitHandle () {
-    this.props.onLocationSubmit(this.props.location.lat,this.props.location.lng)
-    //return false;
-  }
-  onLatChangeHandle (event) {
-    this.props.location.setLat(event.target.value)
-  }
-  onLngChangeHandle (event) {
-    this.props.location.setLng(event.target.value)
   }
   render () {
     return (
         <div id='locator' style={{textAlign : 'center'}}>
           Just a locator :0
-
-          <form>
-            <TextField
-              name="lat"
-              hintText="Latitude"
-              value={this.props.location.lat}
-              onChange={this.onLatChangeHandle}
-            /><br />
-            <br />
-            <TextField
-              name="lng"
-              hintText="Longitude"
-              value={this.props.location.lng}
-              onChange={this.onLngChangeHandle}
-            /><br />
-            <br />
-            <RaisedButton label="Submit" onClick={this.onSubmitHandle}  primary={true} style={{margin : "12px"}} />
-          </form>
+          <h1>Latitude = {this.props.location.lat.toPrecision(9)}</h1>
+          <h1>Longitude = {this.props.location.lng.toPrecision(9)}</h1>
+          <RaisedButton label="Refresh" onClick={this.props.onRefreshClick}  primary={true} style={{margin : "12px"}} />
         </div>
     )
   }
 }
+
 Locator.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  onLocationSubmit: PropTypes.func.isRequired
+  onRefreshClick : PropTypes.func.isRequired
 }
 export default Locator

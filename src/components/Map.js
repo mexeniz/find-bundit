@@ -1,31 +1,25 @@
 import React ,{Component} from 'react'
 import {observer} from 'mobx-react'
 import {GoogleMapLoader, GoogleMap, Marker} from "react-google-maps";
+import {Card} from 'material-ui/Card';
 
 const myMapStyle = {
-  height : "500px",
-  width : "auto",
-  margin : "30px",
-  align: "center"
+  margin : "14px",
+  align: "center",
+  height: "100%"
 };
 
 @observer
 class Map extends Component {
 
-  // render () {
-  //   const {location} = this.props;
-  //   return (
-  //       <div id='locator' style={{textAlign : 'center'}}>
-  //         Just a map view
-  //         <h1>{location.lat}</h1>
-  //         <h1>{location.lng}</h1>
-  //       </div>
-  //   )
-  // }
   render () {
+  const {lat, lng} = this.props.location
+  console.log('lat lng...');
+  console.log(lat);
+  console.log(lng);
   return (
     <div id='my-map' style={myMapStyle}>
-      <section style={{height: "100%"}}>
+      <div style={{height: '100%', width: "100%" }}>
         <GoogleMapLoader
           containerElement={
             <div
@@ -36,14 +30,14 @@ class Map extends Component {
           }
           googleMapElement={
             <GoogleMap
-              defaultZoom={3}
-              defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
+            defaultZoom={19}
+              center={{ lat: lat, lng: lng }}
             >
-            <Marker position={{lat: -25.363882, lng: 131.044922}} />
+            <Marker position={{lat: lat, lng: lng}} />
             </GoogleMap>
           }
         />
-      </section>
+      </div>
     </div>
   );
 }

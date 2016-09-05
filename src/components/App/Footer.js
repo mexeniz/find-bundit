@@ -4,9 +4,15 @@ import {grey50, grey200, grey800} from 'material-ui/styles/colors'
 const footerStyle = {
   color: grey200,
   backgroundColor: grey800,
-  padding: '72px 24px 72px 24px',
+  padding: '10px 12px 10px 12px',
   boxSizing: 'border-box',
-  textAlign: 'center'
+  textAlign: 'center',
+  position: 'fixed',
+  bottom:'0',
+  left:'0',
+  right:'0',
+  height:'10em',
+  width:'100%',
 }
 
 export default class Footer extends Component {

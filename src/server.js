@@ -3,7 +3,10 @@ import bodyParser from 'body-parser'
 import path from 'path'
 import { renderToString } from 'react-dom/server'
 import React from 'react'
+import apiRouter from './api-server'
+
 const app = express()
+const PORT = 3000;
 app.use('/node_modules', express.static(path.join(__dirname, '../node_modules')))
 
 const webpack = require('webpack')
@@ -21,7 +24,7 @@ const renderFullPage = () => {
 		<head>
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWPkc97QJBhtdg6ZM8UgnOOkco3lgEXyw" ></script>
 		</head>
-		<body style="margin:0px;">
+		<body style="margin:0px;overflow=hidden;">
 			<div id="app" ></div>
 			<script src="/static/bundle.js"></script>
 			<footer>
@@ -31,25 +34,14 @@ const renderFullPage = () => {
 	`)
 };
 
-let todos = []; // Todos are stored here
-
 app.use(bodyParser.json());
 
+app.use('/api',apiRouter);
 app.get('/*', function(req, res) {
 
 	const page = renderFullPage();
 
 	res.status(200).send(page);
-});
-
-app.post('/api/todos', function(req, res) {
-	todos = req.body.todos;
-	if (Array.isArray(todos)) {
-		console.log(`Updated todos (${todos.length})`);
-		res.status(201).send(JSON.stringify({ success: true }));
-	} else {
-		res.status(200).send(JSON.stringify({ success: false, error: "expected `todos` to be array" }));
-	}
 });
 
 // example of handling 404 pages
@@ -69,42 +61,62 @@ process.on('uncaughtException', evt => {
 });
 
 
-app.listen(3000, () => {
+app.listen(PORT, '0.0.0.0',  () => {
 	console.log('Web Server Start...')
 });
 
+// init api
+//
+// const api = express()
+//
+// api.use(bodyParser.json());
+// api.use("/",apiRouter);
+// api.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
+// api.listen(API_PORT, () => {
+// 	console.log('API Server Start at '+ API_PORT)
+// });
+
 // init socket.io
-var server = require('http').createServer();
-var io = require('socket.io')(server);
-var port = 3001;
-server.listen(port , function () {
-  console.log('Server listening at port %d', port);
-});
-
-function sleep (time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
-
-const locationInterval = 5000;
-const activated = true ;
-let myLocation = {
-	name: "Mmarcl",
-	id: 1,
-	lat: 0.0,
-	lng: 0.0
-}
-
-console.log('Start Socket.io...');
-io.on('connection', socket => {
-	if (activated){
-		setInterval(() => {
-				console.log("Send Location");
-				socket.emit('location', myLocation);
-			}, locationInterval);
-	}
-	socket.on('update location', (location) => {
-		console.log('Recv location update..')
-		Object.assign(myLocation, location)
-		console.log(myLocation)
-	});
-})
+// var server = require('http').createServer();
+// var io = require('socket.io')(server);
+// var port = 3001;
+// server.listen(port, '0.0.0.0' , function () {
+//   console.log('Server listening at port %d', port);
+// });
+//
+// function sleep (time) {
+//   return new Promise((resolve) => setTimeout(resolve, time));
+// }
+//
+// const locationInterval = 5000;
+// const activated = true ;
+// let myLocation = {
+// 	name: "Mmarcl",
+// 	id: 1,
+// 	lat: 0.0,
+// 	lng: 0.0
+// }
+//
+// console.log('Start Socket.io...');
+// io.on('connection', socket => {
+// 	// if (activated){
+// 	// 	setInterval(() => {
+// 	// 			console.log("Send Location lat="+myLocation.lat+" lng="+myLocation.lng);
+// 	// 			socket.emit('location', myLocation);
+// 	// 		}, locationInterval);
+// 	// }
+// 	socket.on('get location', (id,setLocationCallBack) => {
+// 		console.log('get request for location... id='+id)
+// 		setLocationCallBack(myLocation);
+// 	});
+// 	console.log('new connection!');
+// 	socket.on('update location', (location) => {
+// 		console.log('Recv location update..')
+// 		Object.assign(myLocation, location)
+// 		console.log(myLocation)
+// 	});
+// })

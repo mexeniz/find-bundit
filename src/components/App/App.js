@@ -31,22 +31,6 @@ export default class App extends Component {
     // this.store.setName('test');
     // console.log(this.store);
   }
-  renderChildren (props) {
-    return React.Children.map(props.children, child => {
-    if (child.type === Locator){
-      console.log("Test TESTTESTESTET")
-      return React.cloneElement(child, {
-        location: this.store,
-        childProp: "ei ei",
-        popop: "KKK"
-      })}
-    else{
-      console.type("Locator tYPE")
-      console.log(Locator)
-      return child
-    }
-  })
-  }
 	render () {
     // console.log('Render..')
     const {children} = this.props;

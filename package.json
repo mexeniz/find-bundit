@@ -44,6 +44,8 @@
     "classnames": "^2.2.3",
     "director": "^1.2.8",
     "express": "^4.13.4",
+    "isomorphic-fetch": "^2.2.1",
+    "jquery": "^2.2.4",
     "material-ui": "^0.15.4",
     "mobx": "^2.0.0",
     "mobx-react": "^3.0.0",

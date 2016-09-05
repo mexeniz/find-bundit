@@ -2,44 +2,58 @@ import React ,{Component} from 'react'
 import {observer, inject} from 'mobx-react'
 import {Locator} from '../../components'
 import io from 'socket.io-client'
+import $ from 'jquery'
 
-const HOST = 'http://localhost' ;
-const PORT = 3001 ;
-const socket = io(HOST.concat(':',PORT))
+const INTERVAL = 5000;
 
 @inject('store') @observer
 class LocatorContainer extends Component {
   constructor () {
     super()
-    this.onLocationSubmitHandler = this.onLocationSubmitHandler.bind(this)
-    this.onChange = this.onChange.bind(this)
-    socket.on(`connection`, function (){
-			console.log('Connection...')
+    this.onRefreshClickHandler = this.onRefreshClickHandler.bind(this)
+    this.sendLocation = this.sendLocation.bind(this)
+    this.refreshLocation = this.refreshLocation.bind(this)
+  }
+  refreshLocation () {
+    let myLocation = this.props.store.location;
+    let cb = this.sendLocation;
+    navigator.geolocation.getCurrentPosition( (position) => {
+      var {latitude,longitude} = position.coords;
+      myLocation.setLocation(latitude, longitude);
+      let location = {
+        lat : myLocation.lat,
+        lng : myLocation.lng
+      }
+      cb(location);
     });
-		// socket.on(`locat
   }
-  onChange (event) {
-    // this.updateProperty(event.target.name, event.target.value)
+  onRefreshClickHandler () {
+    this.refreshLocation ()
   }
-  onLocationSubmitHandler (lat, lng) {
-    console.log("Submit")
-    console.log(lat + ' : ' + lng)
-    let location = {
-      lat : lat,
-      lng : lng
-    }
-    socket.emit('update location',location)
+  sendLocation (location) {
+    $.ajax
+    ({
+        type: "POST",
+        url: '/api/setLocation',
+        processData: false,
+        contentType: 'application/json',
+        data: JSON.stringify(location),
+        success: function () {
+          console.log("Successfully send location!");
+        }
+    })
   }
-  // sendLocationMessage (data) {
-  //   //this.props.store.setLocation(data.lat, data.lng)
-  // }
   componentDidMount () {
-
+    setInterval(() => {
+      console.log('Send location...');
+      this.refreshLocation()
+    }
+    , INTERVAL);
   }
 
   render () {
     return (
-      <Locator location={this.props.store.location} onChange={this.onChange} onLocationSubmit={this.onLocationSubmitHandler}/>
+      <Locator location={this.props.store.location} onRefreshClick={this.onRefreshClickHandler}/>
     );
   }
 }
