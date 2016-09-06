@@ -37,25 +37,27 @@ class MapContainer extends Component {
     let locationInterval = 5000;
     setInterval(() => {
       this.serverRequest = $.get('/api/myLocation', function (result) {
-        console.log(result)
         this.handleLocationMessage({
           lat: result.lat,
           lng: result.lng
         })
       }.bind(this));
-      // console.log('fetch location...')
-      // fetch('http://127.0.0.1:7800/myLocation')
-      // .then((response) => response.json())
-      // .then((location) => this.handleLocationMessage (data))
     }, locationInterval);
-
+    setInterval(() => {
+        navigator.geolocation.getCurrentPosition( (position) => {
+          var {latitude,longitude} = position.coords;
+          var {clientLocation} = this.props.store;
+          console.log('update client location')
+          clientLocation.setLocation(latitude, longitude);
+        });
+      }, locationInterval);
   }
 
   render () {
     return (
-      <Paper zDepth={4} style={paperStyle}>
+      <Paper zDepth={2} style={paperStyle}>
         <MapCard />
-        <Map location={this.props.store.location}/>
+        <Map location={this.props.store.location} clientLocation={this.props.store.clientLocation}/>
       </Paper>
     );
   }

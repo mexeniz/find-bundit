@@ -22,6 +22,7 @@ const renderFullPage = () => {
 	<!doctype html>
 	<html lang="utf-8">
 		<head>
+			<title>Mma - Graduation</title>
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWPkc97QJBhtdg6ZM8UgnOOkco3lgEXyw" ></script>
 		</head>
 		<body style="margin:0px;overflow=hidden;">
@@ -36,6 +37,7 @@ const renderFullPage = () => {
 
 app.use(bodyParser.json());
 
+app.use('/image',express.static(__dirname + '/image'));
 app.use('/api',apiRouter);
 app.get('/*', function(req, res) {
 

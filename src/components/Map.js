@@ -1,6 +1,6 @@
 import React ,{Component} from 'react'
 import {observer} from 'mobx-react'
-import {GoogleMapLoader, GoogleMap, Marker} from "react-google-maps";
+import {GoogleMapLoader, Circle, GoogleMap, Marker} from "react-google-maps";
 import {Card} from 'material-ui/Card';
 
 const myMapStyle = {
@@ -11,33 +11,53 @@ const myMapStyle = {
 
 @observer
 class Map extends Component {
+  // center={{lat: parseFloat(clientLat), lng: parseFloat(clientLng)}}
 
   render () {
   const {lat, lng} = this.props.location
-  console.log('lat lng...');
-  console.log(lat);
-  console.log(lng);
+  const clientLat = this.props.clientLocation.lat
+  const clientLng = this.props.clientLocation.lng
+  console.log('bundit= ' +lat + ' ' + lng)
+  console.log('client= ' +clientLat + ' ' + clientLng)
+
+  let contents = [];
+  if (lat >= 0 && lng >= 0){
+    contents = contents.concat((
+      <Marker
+        key="bundit"
+        zIndex={5}
+        position={{lat: lat, lng: lng}}
+        icon="image/salmon-marker.png"
+      />))
+  }
+  if (clientLat >= 0 && clientLng >= 0){
+    contents = contents.concat((
+      <Marker
+        key="client"
+        zIndex={1}
+        position={{lat: clientLat, lng: clientLng}}
+        icon="image/geolocation_marker.png"
+      />))
+  }
   return (
     <div id='my-map' style={myMapStyle}>
-      <div style={{height: '100%', width: "100%" }}>
-        <GoogleMapLoader
-          containerElement={
-            <div
-              style={{
-                height: "100%",
-              }}
-            />
-          }
-          googleMapElement={
-            <GoogleMap
-            defaultZoom={19}
-              center={{ lat: lat, lng: lng }}
-            >
-            <Marker position={{lat: lat, lng: lng}} />
-            </GoogleMap>
-          }
-        />
-      </div>
+      <GoogleMapLoader
+        containerElement={
+          <div
+            style={{
+              height: "100%",
+            }}
+          />
+        }
+        googleMapElement={
+          <GoogleMap
+          defaultZoom={19}
+            center={{ lat: lat, lng: lng }}
+          >
+          {contents}
+          </GoogleMap>
+        }
+      />
     </div>
   );
 }

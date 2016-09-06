@@ -5,9 +5,15 @@ export default class LocationStore {
 
 	socket;
 	@observable location ;
+	@observable clientLocation ;
 
 	constructor () {
-	  this.location = new LocationModel(this, 1, '', 0, 0);
+	  this.location = new LocationModel(this, 1, '', -1, -1);
+		this.clientLocation = new LocationModel(this, 2, 'client', -1, -1);
+		navigator.geolocation.getCurrentPosition( (position) => {
+      var {latitude,longitude} = position.coords;
+      this.clientLocation.setLocation(latitude, longitude);
+    });
 	}
 
 
