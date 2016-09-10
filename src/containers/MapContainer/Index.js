@@ -1,7 +1,6 @@
 import React ,{Component} from 'react'
 import {observer, inject} from 'mobx-react'
 import {Map , MapCard} from '../../components'
-import io from 'socket.io-client'
 import {Card} from 'material-ui/Card'
 import {Paper} from 'material-ui'
 import $ from 'jquery'

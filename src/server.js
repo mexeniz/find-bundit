@@ -3,18 +3,22 @@ import bodyParser from 'body-parser'
 import path from 'path'
 import { renderToString } from 'react-dom/server'
 import React from 'react'
+import mongoose from 'mongoose'
+import morgan from 'morgan'
 import apiRouter from './api-server'
+import config from '../config'
 
 const app = express()
 const PORT = 3000;
 app.use('/node_modules', express.static(path.join(__dirname, '../node_modules')))
+mongoose.connect(config.database); // connect to database
 
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
-const config = require('../webpack.config')
-const compiler = webpack(config)
-app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
+const webpackConfig = require('../webpack.config')
+const compiler = webpack(webpackConfig)
+app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }))
 app.use(webpackHotMiddleware(compiler))
 
 const renderFullPage = () => {
@@ -35,7 +39,9 @@ const renderFullPage = () => {
 	`)
 };
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 
 app.use('/image',express.static(__dirname + '/image'));
 app.use('/api',apiRouter);

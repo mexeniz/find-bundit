@@ -1,7 +1,6 @@
 import React ,{Component} from 'react'
 import {observer, inject} from 'mobx-react'
 import {Locator} from '../../components'
-import io from 'socket.io-client'
 import $ from 'jquery'
 
 const INTERVAL = 5000;
