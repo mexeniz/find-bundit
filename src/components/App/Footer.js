@@ -6,6 +6,7 @@ const footerStyle = {
   backgroundColor: grey800,
   padding: '10px 12px 10px 12px',
   boxSizing: 'border-box',
+  display:'block',
   textAlign: 'center',
   position: 'fixed',
   bottom:'0',

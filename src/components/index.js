@@ -1,4 +1,5 @@
 export App from './App/App'
+export Login from './Login'
 export Home from './Home'
 export Locator from './Locator'
 export Map from './Map'

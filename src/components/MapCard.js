@@ -3,7 +3,7 @@ import {observer} from 'mobx-react'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
-import ActionAndroid from 'material-ui/svg-icons/action/android';
+import ActionEvent from 'material-ui/svg-icons/action/event';
 
 const style = {
   margin: "14px"
@@ -79,10 +79,9 @@ class MapCard extends Component {
         <CardActions>
           <RaisedButton
             label="Schedule"
-            labelPosition="before"
             primary={true}
             onTouchTap={this.handleExpand}
-            icon={<ActionAndroid />}
+            icon={<ActionEvent />}
             style={{margin:"12px"}}
           />
         </CardActions>
