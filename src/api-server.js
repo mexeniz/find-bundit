@@ -52,6 +52,7 @@ apiRouter.get('/myLocation', function(req, res, next) {
 });
 apiRouter.post('/authenticate', function(req, res) {
   // find the user
+  console.log(req.body)
   User.findOne({
     name: req.body.username
   }, function(err, user) {

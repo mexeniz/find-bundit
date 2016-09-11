@@ -7,8 +7,12 @@ import {
 } from './components'
 import {LocatorContainer,MapContainer} from './containers'
 
+var storage = {
+  token :''
+};
+
 function requireAuth(nextState, replace) {
-  if (!auth.loggedIn()) {
+  if (storage.token == '') {
     replace({
       pathname: '/login',
     })
@@ -18,7 +22,7 @@ function requireAuth(nextState, replace) {
 export default () => {
   return (
     <Router history={browserHistory}>
-      <Route path='/' component={App}>
+      <Route path='/' component={App} storage={storage}>
         <IndexRoute component={Home} />
         <Route path='home' component={Home} />
         <Route path='locator' component={LocatorContainer} onEnter={requireAuth} />

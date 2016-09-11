@@ -20,30 +20,18 @@ export default class App extends Component {
   constructor () {
     super()
     this.store = new LocationStore()
-
   }
   componentDidMount () {
-    // console.log('Did mount..')
   }
   componentWillMount () {
-    // console.log('Will mount..')
-    // this.store.setLocation(107.21,15.02);
-    // this.store.setName('test');
-    // console.log(this.store);
   }
 	render () {
-    // console.log('Render..')
     const {children} = this.props;
-    // <Provider location={this.store}>
-    //      {children}
-    // </Provider>
-    console.log('this store')
-    console.log(children)
     return (
 				<div id='main'>
 					<DevTool />
 					<Header />
-          <Provider store={this.store}>
+          <Provider store={this.store} token={this.props.route.storage.token}>
             {children}
           </Provider>
           <Footer />
@@ -53,8 +41,9 @@ export default class App extends Component {
 }
 
 App.defaultProps = {
-  //children : 'Children is here!'
+  token : ''
 }
 
 App.propTypes = {
+  route : PropTypes.object.isRequired
 };
