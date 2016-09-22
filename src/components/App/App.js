@@ -31,7 +31,7 @@ export default class App extends Component {
 				<div id='main'>
 					<DevTool />
 					<Header />
-          <Provider store={this.store} token={this.props.route.storage.token}>
+          <Provider store={{locationStore:this.store}} token={this.props.route.storage.getToken()}>
             {children}
           </Provider>
           <Footer />

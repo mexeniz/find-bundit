@@ -1,33 +1,33 @@
 import React from 'react'
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import { RouterContext,Router, Route, IndexRoute, browserHistory } from 'react-router'
 import {
   App,
   Home,
   Login
 } from './components'
 import {LocatorContainer,MapContainer} from './containers'
+import jwtStore from 'react-jwt-store'
 
-var storage = {
-  token :''
-};
-
-function requireAuth(nextState, replace) {
-  if (storage.token == '') {
-    replace({
-      pathname: '/login',
-    })
-  }
-}
 
 export default () => {
+  var userStore = jwtStore();
+  console.log(userStore)
+  function requireAuth(nextState, replace) {
+    console.log('current token = ' + userStore.getToken())
+    if (!userStore.getToken()) {
+      replace({
+        pathname: '/login',
+      })
+    }
+  }
   return (
     <Router history={browserHistory}>
-      <Route path='/' component={App} storage={storage}>
+      <Route path='/' component={App} storage={userStore}>
         <IndexRoute component={Home} />
         <Route path='home' component={Home} />
-        <Route path='locator' component={LocatorContainer} onEnter={requireAuth} />
+        <Route path='locator' component={LocatorContainer} onEnter={requireAuth} storage={userStore}/>
         <Route path='map' component={MapContainer} />
-        <Route path='login' component={Login} />
+        <Route path='login' component={Login} storage={userStore}/>
       </Route>
     </Router>
   )

@@ -27,7 +27,7 @@ class MapContainer extends Component {
     this.handleLocationMessage = this.handleLocationMessage.bind(this)
   }
   handleLocationMessage (data) {
-    this.props.store.setLocation(data.lat, data.lng)
+    this.props.store.locationStore.setLocation(data.lat, data.lng)
   }
   componentWillMount () {
 
@@ -45,7 +45,7 @@ class MapContainer extends Component {
     setInterval(() => {
         navigator.geolocation.getCurrentPosition( (position) => {
           var {latitude,longitude} = position.coords;
-          var {clientLocation} = this.props.store;
+          var {clientLocation} = this.props.store.locationStore;
           console.log('update client location')
           clientLocation.setLocation(latitude, longitude);
         });
@@ -56,7 +56,7 @@ class MapContainer extends Component {
     return (
       <Paper zDepth={2} style={paperStyle}>
         <MapCard />
-        <Map location={this.props.store.location} clientLocation={this.props.store.clientLocation}/>
+        <Map location={this.props.store.locationStore.location} clientLocation={this.props.store.locationStore.clientLocation}/>
       </Paper>
     );
   }

@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
+import {withRouter} from 'react-router'
 import {inject, observer} from 'mobx-react';
 import {lightBlue50} from 'material-ui/styles/colors'
 import {TextField, RaisedButton} from 'material-ui';
+import jwtStore from 'react-jwt-store'
 import $ from 'jquery'
 
 const style = {
@@ -23,26 +25,33 @@ const welcomeStyle = {
 const buttonStyle = {
   margin: 12
 }
-@inject('token') @observer
-export default class Login extends Component {
+@observer
+class Login extends Component {
   constructor(props) {
     super(props)
     this.onLoginClick = this.onLoginClick.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.setToken = this.setToken.bind(this)
+    this.changeRoute = this.changeRoute.bind(this)
     this.state = this.getState()
+    this.userStore = this.props.route.storage
   }
   getState () {
         return { username : '',
                 password : ''};
   }
-  setToken (token) {
-    console.log(token);
-    this.props.token = token ;
+  changeRoute (token) {
+    alert('Login successfully...')
+    this.userStore.setToken(token)
+    this.props.history.replace({pathname : '/locator'})
   }
   onLoginClick () {
     console.log('token= ' + this.props.token + 'username=' + this.state.username + ' password=' + this.state.password)
-    var setToken = this.setToken
+    var changeRoute = this.changeRoute
+    var data = {
+      username : this.state.username,
+      password : this.state.passwrd
+    }
+
     $.ajax
     ({
         type: "POST",
@@ -51,8 +60,11 @@ export default class Login extends Component {
         contentType: 'application/json',
         data: JSON.stringify(this.state),
         success: function (data) {
-          console.log("Successfully authenticate");
-          setToken(data.token)
+          console.log(data)
+          if (data.token){
+            console.log("Successfully authenticate");
+            changeRoute(data.token)
+          }
         }
     })
   }
@@ -61,7 +73,7 @@ export default class Login extends Component {
   }
   render() {
     // const {todoStore, viewStore} = this.props;
-    console.log(this.props.token);
+    console.log('login token =' + this.userStore.getToken());
     return (
       <div className="container" id="home" style={style}>
         <div style={welcomeStyle}>
@@ -97,8 +109,11 @@ export default class Login extends Component {
     )
   }
 
-  componentDidMount() {}
+  componentDidMount () {
+
+  }
+
 }
 
-Login.propTypes = {
-};
+
+export default withRouter(Login)

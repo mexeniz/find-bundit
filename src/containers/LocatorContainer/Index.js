@@ -7,14 +7,15 @@ const INTERVAL = 5000;
 
 @inject('store') @observer
 class LocatorContainer extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.onRefreshClickHandler = this.onRefreshClickHandler.bind(this)
     this.sendLocation = this.sendLocation.bind(this)
     this.refreshLocation = this.refreshLocation.bind(this)
+    this.userStore = this.props.route.storage;
   }
   refreshLocation () {
-    let myLocation = this.props.store.location;
+    let myLocation = this.props.store.locationStore.location;
     let cb = this.sendLocation;
     navigator.geolocation.getCurrentPosition( (position) => {
       var {latitude,longitude} = position.coords;
@@ -30,14 +31,17 @@ class LocatorContainer extends Component {
     this.refreshLocation ()
   }
   sendLocation (location) {
+    console.log('locator token = '+this.userStore.getToken())
+    let data = Object.assign({}, {token : this.userStore.getToken()} , location)
     $.ajax
     ({
         type: "POST",
         url: '/api/setLocation',
         processData: false,
         contentType: 'application/json',
-        data: JSON.stringify(location),
-        success: function () {
+        data: JSON.stringify(data),
+        success: function (data) {
+          console.log(data)
           console.log("Successfully send location!");
         }
     })
@@ -52,7 +56,7 @@ class LocatorContainer extends Component {
 
   render () {
     return (
-      <Locator location={this.props.store.location} onRefreshClick={this.onRefreshClickHandler}/>
+      <Locator location={this.props.store.locationStore.location} onRefreshClick={this.onRefreshClickHandler}/>
     );
   }
 }
