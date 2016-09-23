@@ -9,15 +9,14 @@ const HOST = 'http://localhost' ;
 const PORT = 3000 ;
 
 const paperStyle = {
-  paddingTop: "14px",
-  paddingBottom: "24em",
+  padingTop: "14px",
+  padingBottom: "14px",
   position: 'absolute',
   top: '4em', // 8em
-  left: '0',
+  left: 0,
   bottom: '8em', // 8em
   right: 0,
-  overflow: 'hidden',
-  height: '100%'
+  overflow: 'auto'
 }
 
 @inject('store') @observer

@@ -6,7 +6,8 @@ import {Card} from 'material-ui/Card';
 const myMapStyle = {
   margin : "14px",
   align: "center",
-  height: "100%"
+  height: "70%",
+  overflow: "auto"
 };
 
 @observer

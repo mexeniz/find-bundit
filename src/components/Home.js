@@ -6,7 +6,9 @@ import {FlatButton} from 'material-ui';
 const style = {
 	textAlign : 'center',
 	position:'absolute',
-	height: '100%',
+	height: 'auto',
+	top: '4em',
+	bottom: '8em',
 	width: '100%'
 }
 

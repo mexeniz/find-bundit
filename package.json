@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Get Graduates' Location and Take a Photo with Them!!",
   "scripts": {
-    "start": "node bin/server.js",
+    "start": "node index.js",
     "lint": "eslint src"
   },
   "repository": {
@@ -49,6 +49,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^2.2.4",
     "jsonwebtoken": "^7.1.9",
+    "letsencrypt-express": "^2.0.3",
     "material-ui": "^0.15.4",
     "mobx": "^2.0.0",
     "mobx-react": "^3.0.0",

@@ -29,7 +29,6 @@ export default class App extends Component {
     const {children} = this.props;
     return (
 				<div id='main'>
-					<DevTool />
 					<Header />
           <Provider store={{locationStore:this.store}} token={this.props.route.storage.getToken()}>
             {children}

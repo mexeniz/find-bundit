@@ -6,11 +6,18 @@ import {TextField, RaisedButton} from 'material-ui';
 import jwtStore from 'react-jwt-store'
 import $ from 'jquery'
 
+// const style = {
+//   textAlign: 'center',
+//   height: '4em',
+//   width: '100%'
+// }
 const style = {
-  textAlign: 'center',
-  position: 'absolute',
-  height: '100%',
-  width: '100%'
+	textAlign : 'center',
+	position:'absolute',
+	height: 'auto',
+	top: '4em',
+	bottom: '8em',
+	width: '100%'
 }
 
 const welcomeStyle = {

@@ -25,6 +25,7 @@ const renderFullPage = () => {
 	return (`
 	<!doctype html>
 	<html lang="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<head>
 			<title>Mma - Graduation</title>
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWPkc97QJBhtdg6ZM8UgnOOkco3lgEXyw" ></script>
