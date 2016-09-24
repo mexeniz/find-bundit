@@ -4,6 +4,7 @@ import {inject, observer} from 'mobx-react';
 import {lightBlue50} from 'material-ui/styles/colors'
 import {TextField, RaisedButton} from 'material-ui';
 import jwtStore from 'react-jwt-store'
+import {FOOTER_HEIGHT}  from '../constants'
 import $ from 'jquery'
 
 // const style = {
@@ -16,7 +17,7 @@ const style = {
 	position:'absolute',
 	height: 'auto',
 	top: '4em',
-	bottom: '8em',
+	bottom: FOOTER_HEIGHT,
 	width: '100%'
 }
 

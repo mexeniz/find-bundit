@@ -2,6 +2,7 @@ import React ,{Component} from 'react'
 import {observer} from 'mobx-react'
 import {GoogleMapLoader, Circle, GoogleMap, Marker} from "react-google-maps";
 import {Card} from 'material-ui/Card';
+import {DEFAULT_ZOOM}  from '../constants'
 
 const myMapStyle = {
   margin : "14px",
@@ -35,7 +36,7 @@ class Map extends Component {
     contents = contents.concat((
       <Marker
         key="client"
-        zIndex={1}
+        zIndex={2}
         position={{lat: clientLat, lng: clientLng}}
         icon="image/geolocation_marker.png"
       />))
@@ -52,7 +53,7 @@ class Map extends Component {
         }
         googleMapElement={
           <GoogleMap
-          defaultZoom={19}
+          defaultZoom={DEFAULT_ZOOM}
             center={{ lat: lat, lng: lng }}
           >
           {contents}

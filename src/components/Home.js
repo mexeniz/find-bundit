@@ -2,13 +2,14 @@ import React ,{Component} from 'react';
 import {observer} from 'mobx-react';
 import {lightBlue50,blue500,blueGrey50,deepOrange500} from 'material-ui/styles/colors'
 import {FlatButton} from 'material-ui';
+import {FOOTER_HEIGHT}  from '../constants'
 
 const style = {
 	textAlign : 'center',
 	position:'absolute',
 	height: 'auto',
 	top: '4em',
-	bottom: '8em',
+	bottom: FOOTER_HEIGHT,
 	width: '100%'
 }
 
@@ -39,6 +40,7 @@ export default class Home extends Component {
 		return (
 			<div className="container" id="home" style={style}>
 				<div style={welcomeStyle}>
+	        <p style={{fontSize: "24px"}}>Get Mma's location and take photos with him :)</p>
 					<FlatButton onClick={this.onLocateClick.bind(this)} label="Locate Mma!"  primary={true} style={buttonStyle} />
 				</div>
 			</div>

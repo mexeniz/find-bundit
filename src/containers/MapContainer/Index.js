@@ -3,6 +3,7 @@ import {observer, inject} from 'mobx-react'
 import {Map , MapCard} from '../../components'
 import {Card} from 'material-ui/Card'
 import {Paper} from 'material-ui'
+import {FOOTER_HEIGHT}  from '../../constants'
 import $ from 'jquery'
 
 const HOST = 'http://localhost' ;
@@ -14,7 +15,7 @@ const paperStyle = {
   position: 'absolute',
   top: '4em', // 8em
   left: 0,
-  bottom: '8em', // 8em
+  bottom: FOOTER_HEIGHT, // 8em
   right: 0,
   overflow: 'auto'
 }

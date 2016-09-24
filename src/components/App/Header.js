@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 // import { Link } from 'react-router'
 import {withRouter} from 'react-router'
 import {APP_NAME} from '../../constants'
-import { AppBar, IconButton, IconMenu, MenuItem, Drawer} from 'material-ui'
+import { AppBar, IconButton, IconMenu, MenuItem, Drawer,FontIcon} from 'material-ui'
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import {red500, yellow500, blue500} from 'material-ui/styles/colors';
+import ActionFace from 'material-ui/svg-icons/action/face';
 
 const style = {
   position: 'absolute',
@@ -55,6 +57,10 @@ class Header extends Component {
     const menuAppIconLeft = (
       <IconButton onTouchTap={this.handleClose}><NavigationClose /></IconButton>
     )
+    const MexenizLink = (
+      <a href='https://github.com/mexeniz' >@mexeniz</a>
+    )
+    console.log((<FontIcon className="muidocs-icon-custom-github" color={blue500} />))
     return (
       <div className='nav'>
         <AppBar
@@ -74,6 +80,10 @@ class Header extends Component {
           />
             <MenuItem onTouchTap={this.redirectHome}>Home</MenuItem>
             <MenuItem onTouchTap={this.redirectMap}>Map</MenuItem>
+            <MenuItem
+              leftIcon={<ActionFace />}
+              >@Mexeniz
+            </MenuItem>
           </Drawer>
       </div>
     )

@@ -33,35 +33,25 @@ class MapCard extends Component {
           adjustForCheckbox={false}
           >
         <TableRow>
-          <TableHeaderColumn>No.</TableHeaderColumn>
-          <TableHeaderColumn>Event</TableHeaderColumn>
           <TableHeaderColumn>Date</TableHeaderColumn>
+          <TableHeaderColumn>Event</TableHeaderColumn>
           <TableHeaderColumn>Photo session</TableHeaderColumn>
         </TableRow>
       </TableHeader>
       <TableBody displayRowCheckbox={false}>
         <TableRow>
-          <TableRowColumn>1</TableRowColumn>
-          <TableRowColumn>ถ่ายรูปนอกรอบ</TableRowColumn>
-          <TableRowColumn>18/9/2559</TableRowColumn>
-          <TableRowColumn>8.00 AM - 6.00 PM</TableRowColumn>
-        </TableRow>
-        <TableRow>
-          <TableRowColumn>2</TableRowColumn>
-          <TableRowColumn>ซ้อมรับปริญญาครั้งที่ 1</TableRowColumn>
-          <TableRowColumn>3/10/2559</TableRowColumn>
+         <TableRowColumn>3/10/2559</TableRowColumn>
+          <TableRowColumn>1st Rehearsal Day</TableRowColumn>
           <TableRowColumn>N/A</TableRowColumn>
         </TableRow>
         <TableRow>
-          <TableRowColumn>3</TableRowColumn>
-          <TableRowColumn>ซ้อมรับปริญญาครั้งที่ 2</TableRowColumn>
           <TableRowColumn>8/10/2559</TableRowColumn>
+          <TableRowColumn>2nd Rehearsal Day</TableRowColumn>
           <TableRowColumn>8.00 AM - 11.00 AM</TableRowColumn>
         </TableRow>
         <TableRow>
-          <TableRowColumn>4</TableRowColumn>
-          <TableRowColumn>พิธีพระราชทานปริญญาบัตร</TableRowColumn>
           <TableRowColumn>20/10/2559</TableRowColumn>
+          <TableRowColumn>Commencement Day</TableRowColumn>
           <TableRowColumn>1.00 PM - 6.00 PM</TableRowColumn>
         </TableRow>
       </TableBody>

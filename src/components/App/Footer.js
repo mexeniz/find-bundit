@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {grey50, grey200, grey800} from 'material-ui/styles/colors'
+import {FOOTER_HEIGHT} from '../../constants'
 
 const footerStyle = {
   color: grey200,
@@ -11,7 +12,7 @@ const footerStyle = {
   bottom:'0',
   left:'0',
   right:'0',
-  height:'8em',
+  height: FOOTER_HEIGHT,
   width:'100%',
 }
 
@@ -29,12 +30,12 @@ export default class Footer extends Component {
     const MexenizLink = (
       <a href='https://github.com/mexeniz' style={{color: grey50}}>Mexeniz</a>
     )
-
+    //   <p>Get Mma's location and take photos with him :)</p>
+    //   <p>Powered by {ReactLink} {MaterialUILink} {MobxLink}</p>
+    //   <p>Created by {MexenizLink}</p>
     return (
       <div className='footer' style={footerStyle}>
-        <p>Get Mma's location and take photos with him :)</p>
         <p>Powered by {ReactLink} {MaterialUILink} {MobxLink}</p>
-        <p>Created by {MexenizLink}</p>
       </div>
     )
   }
