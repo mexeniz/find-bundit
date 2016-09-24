@@ -32,7 +32,7 @@ export default class Footer extends Component {
 
     return (
       <div className='footer' style={footerStyle}>
-        <p>Get graduates' location and take photos with them :)</p>
+        <p>Get Mma's location and take photos with him :)</p>
         <p>Powered by {ReactLink} {MaterialUILink} {MobxLink}</p>
         <p>Created by {MexenizLink}</p>
       </div>

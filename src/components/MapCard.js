@@ -36,7 +36,7 @@ class MapCard extends Component {
           <TableHeaderColumn>No.</TableHeaderColumn>
           <TableHeaderColumn>Event</TableHeaderColumn>
           <TableHeaderColumn>Date</TableHeaderColumn>
-          <TableHeaderColumn>Photography Time</TableHeaderColumn>
+          <TableHeaderColumn>Photo session</TableHeaderColumn>
         </TableRow>
       </TableHeader>
       <TableBody displayRowCheckbox={false}>

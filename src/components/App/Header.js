@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 // import { Link } from 'react-router'
+import {withRouter} from 'react-router'
 import {APP_NAME} from '../../constants'
-import { AppBar, IconButton, IconMenu, MenuItem } from 'material-ui'
+import { AppBar, IconButton, IconMenu, MenuItem, Drawer} from 'material-ui'
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 const style = {
   position: 'absolute',
@@ -12,17 +14,33 @@ const style = {
   right: '0',
   height: '4em'
 }
-export default class Header extends Component {
-  constructor () {
-    super()
-    this.handleNavMenuTap = this.handleNavMenuTap.bind(this)
+class Header extends Component {
+  constructor (props) {
+    super(props)
+    this.handleToggle = this.handleToggle.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+    this.state = {open: false};
+    this.redirectHome = this.redirectHome.bind(this)
+    this.redirectMap = this.redirectMap.bind(this)
   }
-  handleNavMenuTap () {
-    console.log('Nav Menu Tapped!')
+  redirectHome () {
+    this.props.history.replace({pathname : '/home'})
+    this.handleClose()
+  }
+  redirectMap () {
+    this.props.history.replace({pathname : '/map'})
+    this.handleClose()
+  }
+  handleToggle () {
+    this.setState({open: !this.state.open});
+  }
+  handleClose () {
+    console.log("close!!")
+    this.setState({open: false});
   }
   render () {
     const iconLeft = (
-      <IconButton onTouchTap={this.handleNavMenuTap}><NavigationMenu /></IconButton>
+      <IconButton onTouchTap={this.handleToggle}><NavigationMenu /></IconButton>
     )
     const iconRight = (
       <IconMenu
@@ -32,19 +50,34 @@ export default class Header extends Component {
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        <MenuItem primaryText='Refresh' />
-        <MenuItem primaryText='About Us' />
-        <MenuItem primaryText='Help' />
       </IconMenu>
+    )
+    const menuAppIconLeft = (
+      <IconButton onTouchTap={this.handleClose}><NavigationClose /></IconButton>
     )
     return (
       <div className='nav'>
         <AppBar
           title={APP_NAME}
           iconElementLeft={iconLeft}
-          iconElementRight={iconRight}
+          onLeftIconButtonTouchTap={this.handleToggle}
           />
+          <Drawer
+            docked={false}
+            width={200}
+            open={this.state.open}
+            onRequestChange={(open) => this.setState({open})}
+          > <AppBar
+            title="Menu"
+            iconElementLeft={menuAppIconLeft}
+            onLeftIconButtonTouchTap={this.handleClose}
+          />
+            <MenuItem onTouchTap={this.redirectHome}>Home</MenuItem>
+            <MenuItem onTouchTap={this.redirectMap}>Map</MenuItem>
+          </Drawer>
       </div>
     )
   }
 }
+
+export default withRouter(Header)

@@ -17,8 +17,8 @@ const style = {
 
 @observer
 export default class App extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.store = new LocationStore()
   }
   componentDidMount () {
@@ -29,7 +29,7 @@ export default class App extends Component {
     const {children} = this.props;
     return (
 				<div id='main'>
-					<Header />
+					<Header history={this.props.history}/>
           <Provider store={{locationStore:this.store}} token={this.props.route.storage.getToken()}>
             {children}
           </Provider>

@@ -1,6 +1,6 @@
 import React ,{Component} from 'react';
 import {observer} from 'mobx-react';
-import {blue500,blueGrey50,deepOrange500} from 'material-ui/styles/colors'
+import {lightBlue50,blue500,blueGrey50,deepOrange500} from 'material-ui/styles/colors'
 import {FlatButton} from 'material-ui';
 
 const style = {
@@ -13,18 +13,21 @@ const style = {
 }
 
 const welcomeStyle = {
-	fontSize: '48px',
-  backgroundColor: blue500,
+	position : "relative",
+  backgroundColor: lightBlue50,
+	// backgroundRepeat : "no-repeat",
+  // backgroundPosition : "center",
+	// backgroundImage: "url('../image/mma_grad_cover.jpg')",
   padding: '120px 24px 120px 24px',
   boxSizing: 'border-box',
   textAlign: 'center',
-	height: '100%'
+	height: '100%',
 }
 
 const buttonStyle = {
   backgroundColor: deepOrange500,
 	color: blueGrey50,
-	margin: 12
+	// margin: 12
 }
 @observer
 export default class Home extends Component {
@@ -36,7 +39,6 @@ export default class Home extends Component {
 		return (
 			<div className="container" id="home" style={style}>
 				<div style={welcomeStyle}>
-					<h1>Home Screen</h1>
 					<FlatButton onClick={this.onLocateClick.bind(this)} label="Locate Mma!"  primary={true} style={buttonStyle} />
 				</div>
 			</div>

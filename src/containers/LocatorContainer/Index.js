@@ -31,7 +31,6 @@ class LocatorContainer extends Component {
     this.refreshLocation ()
   }
   sendLocation (location) {
-    console.log('locator token = '+this.userStore.getToken())
     let data = Object.assign({}, {token : this.userStore.getToken()} , location)
     $.ajax
     ({
