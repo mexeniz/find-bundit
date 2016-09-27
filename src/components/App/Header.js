@@ -8,6 +8,8 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import {red500, yellow500, blue500} from 'material-ui/styles/colors';
 import ActionFace from 'material-ui/svg-icons/action/face';
+import ActionHome from 'material-ui/svg-icons/action/home';
+import MapPlace from 'material-ui/svg-icons/maps/place';
 
 const style = {
   position: 'absolute',
@@ -78,12 +80,9 @@ class Header extends Component {
             iconElementLeft={menuAppIconLeft}
             onLeftIconButtonTouchTap={this.handleClose}
           />
-            <MenuItem onTouchTap={this.redirectHome}>Home</MenuItem>
-            <MenuItem onTouchTap={this.redirectMap}>Map</MenuItem>
-            <MenuItem
-              leftIcon={<ActionFace />}
-              >@Mexeniz
-            </MenuItem>
+            <MenuItem onTouchTap={this.redirectHome} leftIcon={<ActionHome />} >Home</MenuItem>
+            <MenuItem onTouchTap={this.redirectMap} leftIcon={<MapPlace />} >Map</MenuItem>
+            <MenuItem leftIcon={<ActionFace />} >@Mexeniz</MenuItem>
           </Drawer>
       </div>
     )
