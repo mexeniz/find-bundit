@@ -3,58 +3,103 @@ import jwt from 'jsonwebtoken'
 import config from '../config'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
-
+import jwtDecode from 'jwt-decode'
 var apiRouter = express.Router()
 
 var Schema = mongoose.Schema;
 
 // set up a mongoose model
 var User = mongoose.model('User', new Schema({
-  name: String,
-  password: String,
-  admin: Boolean
-}));
+  username: {type: String, unique: true, required: true},
+  password: {type : String, required: true},
+  isActive: {type : Boolean, default: false},
+  phoneNumber: String,
+  email: String,
+  lat: {type : Number, min: 0.0, default: 0.0},
+  lng: {type : Number, min: 0.0, default: 0.0}
+},{timestamps: true}));
 
 const saltRounds = 10;
-
-let myLocation = {
-  name: "Mmarcl",
-  id: 1,
-  lat: 0.0,
-  lng: 0.0
-}
 
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace('-', '+').replace('_', '/');
+  return JSON.parse(window.atob(base64));
+};
 // Insecured API
-apiRouter.get('/setup', function(req, res) {
-  bcrypt.hash(config.password, saltRounds, function(err, hash) {
-    // Store hash in your password DB.
-    // create a sample user
-    var mmarcl = new User({
-      name: config.username,
-      password: hash,
-      admin: true
+apiRouter.post('/register', function(req, res) {
+  if( ! ('username' in req.body) || !( 'password' in req.body) ){
+    res.json({
+      success: false,
+      message: 'Bad request format'
     });
-    mmarcl.save(function(err) {
-      if (err) throw err;
+  }else{
+    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+      // Store hash in your password DB.
+      // create a sample user
+      var user = new User({
+        username: req.body.username,
+        password: hash,
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email,
+      });
+      user.save(function(err) {
+        if (err){
+          res.json({
+            success: false,
+            message: 'duplicated user'
+          });
+          throw err;
+        }
 
-      console.log('User saved successfully');
-      res.json({
-        success: true
+        console.log('Register User successfully');
+
+        var token = jwt.sign(user, config.secret, {
+          expiresIn: 86400 // expires in 24 hours
+        });
+
+        res.json({
+          success: true,
+          message: 'Enjoy your token!',
+          token: token
+        });
       });
     });
+  }
+
+});
+apiRouter.get('/getFriendLocation/:name', function(req, res, next) {
+  var name = req.params.name;
+  User.findOne({
+    username: name
+  }, function(err, user) {
+    if (err) throw err;
+
+    if (!user) {
+      res.json({
+        success: false,
+        message: ('Not found user with name=' + name)
+      });
+    } else if (user) {
+      res.json({
+        success: true,
+        message: ('Successfully get user\'s location name=' + name),
+        lat: user.lat,
+        lng: user.lng,
+        isActive: user.isActive,
+        updatedAt: user.updatedAt
+      });
+    }
   });
 });
-apiRouter.get('/myLocation', function(req, res, next) {
-  res.json(myLocation);
-});
-apiRouter.post('/authenticate', function(req, res) {
+apiRouter.post('/login', function(req, res) {
   // find the user
-  console.log(req.body)
+  console.log(req.body);
   User.findOne({
-    name: req.body.username
+    username: req.body.username
   }, function(err, user) {
 
     if (err) throw err;
@@ -71,7 +116,7 @@ apiRouter.post('/authenticate', function(req, res) {
         if (cmpRes) {
           // if user is found and password is right
           // create a token
-          var token = jwt.sign(user, config.secret, {
+          var token = jwt.sign({ username :user.username}, config.secret, {
             expiresIn: 86400 // expires in 24 hours
           });
 
@@ -126,22 +171,55 @@ apiRouter.use(function(req, res, next) {
 
 });
 // Secured API
-apiRouter.post('/setLocation', function(req, res, next) {
+apiRouter.post('/updateMyLocation', function(req, res) {
   var newLocation = req.body;
-  console.log('client ip:' + req.headers.host)
+  var token = req.body.token;
+  var decoded = jwtDecode(token);
+  var username = decoded.username ;
+  console.log("token username="+username);
+  console.log('client ip:' + req.headers.host);
   console.log('user-agent:' + req.headers['user-agent'])
   console.log('get new location' + newLocation)
   if ('lat' in newLocation && 'lng' in newLocation) {
     let lat = parseFloat(newLocation.lat)
     let lng = parseFloat(newLocation.lng)
     if (isNumber(lat) && isNumber(lng) && lat >= 0.0 && lng >= 0.0) {
-      Object.assign(myLocation, {
-        lat: lat,
-        lng: lng
+      // Object.assign(myLocation, {
+      //   lat: lat,
+      //   lng: lng
+      // })
+      // TODO: save to db here
+      User.findOne({username : username},function(err,user) {
+        if (err) throw err;
+        else{
+          if(!user){
+            res.json({
+              status: 'Failed',
+              message: 'Not found username='+username
+            });
+          }else{
+            user.lat = lat ;
+            user.lng = lng ;
+            user.save(function(err, user_res){
+            if(err) {
+                res.status(500).send('Internal Server Error');
+                throw err;
+            }
+            if(!user_res) {
+                return res.end('No such user');
+            }else{
+              res.json({
+                success: true,
+                username: user_res.username,
+                updatedAt: user_res.updatedAt,
+                lat : user_res.lat,
+                lng : user_res.lng
+              });
+            }
+            });
+          }
+        }
       })
-      res.json({
-        status: 'OK'
-      });
     } else {
       res.status(500).json({
         error: 'Numeric conversion failed'
@@ -152,7 +230,45 @@ apiRouter.post('/setLocation', function(req, res, next) {
       error: 'Wrong body format'
     });
   }
-
-
+});
+apiRouter.post('/updateMyActive', function(req, res) {
+  var token = req.body.token;
+  var decoded = jwtDecode(token);
+  var username = decoded.username ;
+  if ('isActive' in req.body) {
+    var isActive = req.body.isActive ;
+    User.findOne({username : username},function(err,user) {
+        if (err) throw err;
+        else{
+          if(!user){
+            res.json({
+              status: 'Failed',
+              message: 'Not found username='+username
+            });
+          }else{
+            user.isActive = isActive ;
+            user.save(function(err, user_res){
+            if(err) {
+                res.status(500).send('Internal Server Error');
+                throw err;
+            }
+            if(!user_res) {
+                return res.end('No such user');
+            }else{
+              res.json({
+                status: 'OK',
+                username: user_res.username,
+                isActive: user_res.isActive,
+              });
+            }
+            });
+          }
+        }
+      });
+    } else {
+    res.status(500).json({
+      error: 'Wrong body format'
+    });
+  }
 });
 export default apiRouter

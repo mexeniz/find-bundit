@@ -61,8 +61,8 @@ class MapCard extends Component {
       <Card style={style} expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
         <CardHeader
           avatar="image/bundit-face.jpg"
-          title="Check my location from below map :)"
-          subtitle="My location refresh every 5 second"
+          title="Check my location from the map below. :)"
+          subtitle="My location refreshes every 5 sec."
           actAsExpander={true}
           showExpandableButton={true}
         />
