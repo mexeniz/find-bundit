@@ -139,7 +139,7 @@ apiRouter.post('/login', function(req, res) {
 apiRouter.use(function(req, res, next) {
 
   // check header or url parameters or post parameters for token
-  var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+  var token = req.body.token || req.params.token || req.headers['x-access-token'];
 
   // decode token
   if (token) {
@@ -200,7 +200,6 @@ apiRouter.post('/updateMyLocation', function(req, res) {
           }else{
             user.lat = lat ;
             user.lng = lng ;
-            user.isActive = true;
             user.save(function(err, user_res){
             if(err) {
                 res.status(500).send('Internal Server Error');
