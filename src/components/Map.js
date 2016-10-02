@@ -4,6 +4,14 @@ import {GoogleMapLoader, Circle, GoogleMap, Marker} from "react-google-maps";
 import {Card} from 'material-ui/Card';
 import {DEFAULT_ZOOM}  from '../constants'
 
+// compose marker path
+var pathArray = location.href.split( '/' );
+var protocol = pathArray[0];
+var host = pathArray[2];
+var baseUrl = protocol + '//' + host;
+const markerIconPath = baseUrl + '/image/salmon-marker.png'
+const clientIconPath = baseUrl + '/image/geolocation_marker.png'
+
 const myMapStyle = {
   margin : "14px",
   align: "center",
@@ -29,17 +37,18 @@ class Map extends Component {
         key="bundit"
         zIndex={5}
         position={{lat: lat, lng: lng}}
-        icon="image/salmon-marker.png"
+        icon= {markerIconPath}
       />))
-  }
-  if (clientLat >= 0 && clientLng >= 0){
-    contents = contents.concat((
-      <Marker
-        key="client"
-        zIndex={2}
-        position={{lat: clientLat, lng: clientLng}}
-        icon="image/geolocation_marker.png"
-      />))
+
+      if (clientLat >= 0 && clientLng >= 0){
+        contents = contents.concat((
+          <Marker
+            key="client"
+            zIndex={2}
+            position={{lat: clientLat, lng: clientLng}}
+            icon= {clientIconPath}
+          />))
+      }
   }
   return (
     <div id='my-map' style={myMapStyle}>
