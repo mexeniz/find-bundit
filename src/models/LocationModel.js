@@ -6,6 +6,8 @@ export default class LocationModel {
   @observable name;
 	@observable lat;
 	@observable lng;
+	@observable updatedAt;
+	@observable isActive;
 
 	constructor (store,name, id, lat, lng) {
 		this.store = store;
@@ -13,19 +15,28 @@ export default class LocationModel {
 		this.name = name;
 		this.lat = lat;
 		this.lng = lng;
+		this.updatedAt = null;
+		this.isActive = false;
+	}
+	setActive(active) {
+		this.isActive = active;
 	}
 
 	setName(name) {
-		this.name = !this.name;
+		this.name = name;
 	}
 
 	destroy() {
 		this.store.maps.remove(this);
 	}
 
-	setLocation(lat,lng) {
+	setLocation(lat,lng, updatedAt) {
 		this.lng = parseFloat(lng);
 		this.lat = parseFloat(lat);
+		if(updatedAt){
+			this.updatedAt = this.timeSince(Date.parse(updatedAt));
+			console.log('set updatedAt='+updatedAt + ' timeSince='+this.updatedAt)
+		}
 	}
 	setLat(lat) {
 		this.lat = lat
@@ -40,6 +51,33 @@ export default class LocationModel {
 			lat: this.lat,
 			lng: this.lng
 		};
+	}
+	timeSince (date) {
+			console.log('type ='+typeof(date))
+	    var seconds = Math.floor((new Date() - date) / 1000);
+			console.log('seconds ='+seconds)
+	    var interval = Math.floor(seconds / 31536000);
+			console.log('intervel ='+interval)
+	    if (interval > 1) {
+	        return interval + " years";
+	    }
+	    interval = Math.floor(seconds / 2592000);
+	    if (interval > 1) {
+	        return interval + " months";
+	    }
+	    interval = Math.floor(seconds / 86400);
+	    if (interval > 1) {
+	        return interval + " days";
+	    }
+	    interval = Math.floor(seconds / 3600);
+	    if (interval > 1) {
+	        return interval + " hours";
+	    }
+	    interval = Math.floor(seconds / 60);
+	    if (interval > 1) {
+	        return interval + " minutes";
+	    }
+	    return Math.floor(seconds) + " seconds";
 	}
 
 	static fromJS(store, object) {

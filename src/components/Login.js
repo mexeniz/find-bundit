@@ -33,7 +33,7 @@ const welcomeStyle = {
 const buttonStyle = {
   margin: 12
 }
-@observer
+@inject('store') @observer
 class Login extends Component {
   constructor(props) {
     super(props)
@@ -42,6 +42,7 @@ class Login extends Component {
     this.changeRoute = this.changeRoute.bind(this)
     this.state = this.getState()
     this.userStore = this.props.route.storage
+		this.myLocation = this.props.store.locationStore.clientLocation;
   }
   getState () {
         return { username : '',
@@ -59,11 +60,11 @@ class Login extends Component {
       username : this.state.username,
       password : this.state.passwrd
     }
-
+		this.myLocation.setName(this.state.username);
     $.ajax
     ({
         type: "POST",
-        url: '/api/authenticate',
+        url: '/api/login',
         processData: false,
         contentType: 'application/json',
         data: JSON.stringify(this.state),

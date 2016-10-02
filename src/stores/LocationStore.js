@@ -38,8 +38,8 @@ export default class LocationStore {
 	@action setName (name) {
 		this.location.name = name;
 	}
-	@action setLocation (lat, lng) {
-		this.location.setLocation(lat,lng)
+	@action setLocation (lat, lng,updatedAt) {
+		this.location.setLocation(lat,lng,updatedAt)
 	}
 	@action setLat (lat) {
 		this.location.setLat(lat)

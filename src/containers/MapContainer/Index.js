@@ -3,7 +3,7 @@ import {observer, inject} from 'mobx-react'
 import {Map , MapCard} from '../../components'
 import {Card} from 'material-ui/Card'
 import {Paper} from 'material-ui'
-import {FOOTER_HEIGHT}  from '../../constants'
+import {FOOTER_HEIGHT, REFRESH_INTERVAL}  from '../../constants'
 import $ from 'jquery'
 
 const HOST = 'http://localhost' ;
@@ -22,23 +22,29 @@ const paperStyle = {
 
 @inject('store') @observer
 class MapContainer extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.handleLocationMessage = this.handleLocationMessage.bind(this)
+    console.log('params')
+    console.log(this.props.params)
+    this.name = this.props.params.name
   }
   handleLocationMessage (data) {
-    this.props.store.locationStore.setLocation(data.lat, data.lng)
+    this.props.store.locationStore.setLocation(data.lat, data.lng,data.updatedAt)
   }
   componentWillMount () {
 
   }
   componentDidMount () {
-    let locationInterval = 5000;
+    let locationInterval = 1000 * REFRESH_INTERVAL;
     setInterval(() => {
-      this.serverRequest = $.get('/api/myLocation', function (result) {
+      this.serverRequest = $.get('/api/getFriendLocation/'+this.name, function (response) {
+        // console.log('response')
+        // console.log(response)
         this.handleLocationMessage({
-          lat: result.lat,
-          lng: result.lng
+          lat: response.lat,
+          lng: response.lng,
+          updatedAt : response.updatedAt
         })
       }.bind(this));
     }, locationInterval);
@@ -55,7 +61,7 @@ class MapContainer extends Component {
   render () {
     return (
       <Paper zDepth={2} style={paperStyle}>
-        <MapCard />
+        <MapCard location={this.props.store.locationStore.location} />
         <Map location={this.props.store.locationStore.location} clientLocation={this.props.store.locationStore.clientLocation}/>
       </Paper>
     );

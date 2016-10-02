@@ -31,11 +31,13 @@ class LocatorContainer extends Component {
     this.refreshLocation ()
   }
   sendLocation (location) {
+    // add token to request body
     let data = Object.assign({}, {token : this.userStore.getToken()} , location)
+    let name = this.props.store.locationStore.clientLocation.name
     $.ajax
     ({
         type: "POST",
-        url: '/api/setLocation',
+        url: '/api/updateMyLocation/',
         processData: false,
         contentType: 'application/json',
         data: JSON.stringify(data),

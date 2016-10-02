@@ -1,9 +1,14 @@
 import React ,{Component} from 'react'
 import {observer} from 'mobx-react'
+import Chip from 'material-ui/Chip';
+import Avatar from 'material-ui/Avatar';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import ActionEvent from 'material-ui/svg-icons/action/event';
+import {blue300, indigo900} from 'material-ui/styles/colors';
+import SvgIconSchedule from 'material-ui/svg-icons/action/schedule';
+import {REFRESH_INTERVAL} from '../../constatns'
 
 const style = {
   margin: "14px"
@@ -12,8 +17,8 @@ const style = {
 @observer
 class MapCard extends Component {
 
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.state = {
       expanded: false,
     };
@@ -57,17 +62,30 @@ class MapCard extends Component {
       </TableBody>
     </Table>
     );
+    var lastUpdated = 'Unknown'
+    console.log('last updated')
+    console.log(this.props.location.updatedAt)
+    if(this.props.location.updatedAt != null){
+      lastUpdated = this.props.location.updatedAt
+    }
     return (
       <Card style={style} expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
         <CardHeader
           avatar="image/bundit-face.jpg"
           title="Check my location from the map below. :)"
-          subtitle="My location refreshes every 5 sec."
+          subtitle="My location refreshes every "+REFRESH_INTERVAL+" sec."
           actAsExpander={true}
           showExpandableButton={true}
         />
         <CardActions>
-          <RaisedButton
+        <Chip
+          backgroundColor={blue300}
+          style={{margin:4}}
+        >
+          <Avatar size={32} color={blue300} backgroundColor={indigo900} icon={<SvgIconSchedule />} />
+          Last Update: {lastUpdated} ago
+        </Chip>
+        <RaisedButton
             label="Schedule"
             primary={true}
             onTouchTap={this.handleExpand}
@@ -83,3 +101,11 @@ class MapCard extends Component {
   }
 }
 export default MapCard
+
+// <Chip
+//   backgroundColor={blue300}
+//   style={{margin:4}}
+// >
+//   <Avatar size={32} color={blue300} backgroundColor={indigo900} icon={<SvgIconSchedule />} />
+//   Last Update: {lastUpdated}
+// </Chip>
