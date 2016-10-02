@@ -8,7 +8,16 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ActionEvent from 'material-ui/svg-icons/action/event';
 import {blue300, indigo900} from 'material-ui/styles/colors';
 import SvgIconSchedule from 'material-ui/svg-icons/action/schedule';
-import {REFRESH_INTERVAL} from '../../constatns'
+import DeviceGpsFixed from 'material-ui/svg-icons/device/gps-fixed';
+import DeviceGpsNotFixed from 'material-ui/svg-icons/device/gps-not-fixed';
+import DeviceGpsOff from 'material-ui/svg-icons/device/gps-off';
+import {REFRESH_INTERVAL} from '../constants'
+
+// compose picture path
+var pathArray = location.href.split( '/' );
+var protocol = pathArray[0];
+var host = pathArray[2];
+var baseUrl = protocol + '//' + host;
 
 const style = {
   margin: "14px"
@@ -22,6 +31,7 @@ class MapCard extends Component {
     this.state = {
       expanded: false,
     };
+    this.avatarPath = baseUrl + '/image/'+this.props.name+'.jpg'
   }
   handleExpandChange = (expanded) => {
     this.setState({expanded: expanded});
@@ -62,29 +72,59 @@ class MapCard extends Component {
       </TableBody>
     </Table>
     );
-    var lastUpdated = 'Unknown'
-    console.log('last updated')
-    console.log(this.props.location.updatedAt)
+    var lastUpdated = 'N/A'
     if(this.props.location.updatedAt != null){
       lastUpdated = this.props.location.updatedAt
     }
+    const subtitleText = 'My location refreshes every ' + REFRESH_INTERVAL+ ' sec.'
+
+    // compose status Chip
+    var status = 'N/A'
+    var statusBGColor = '#9E9E9E'
+    var statusColor = '#F5F5F5'
+    var statusIcon = <DeviceGpsNotFixed />
+    if (this.props.location.isActive != null){
+      if (this.props.location.isActive){
+        // host is sill updating location
+        status = 'Active'
+        statusBGColor = '#4CAF50'
+        statusColor = '#C8E6C9'
+        statusIcon = <DeviceGpsFixed />
+      }else{
+        // host is not updating location anymore...
+        status = 'Inactive'
+        statusBGColor = '#FF5722'
+        statusColor = '#FFCCBC'
+        statusIcon = <DeviceGpsOff />
+      }
+    }
+
     return (
       <Card style={style} expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
         <CardHeader
-          avatar="image/bundit-face.jpg"
-          title="Check my location from the map below. :)"
-          subtitle="My location refreshes every "+REFRESH_INTERVAL+" sec."
+          avatar= {this.avatarPath}
+          title='Check my location from the map below. :)'
+          subtitle={subtitleText}
           actAsExpander={true}
           showExpandableButton={true}
         />
         <CardActions>
-        <Chip
-          backgroundColor={blue300}
-          style={{margin:4}}
-        >
-          <Avatar size={32} color={blue300} backgroundColor={indigo900} icon={<SvgIconSchedule />} />
-          Last Update: {lastUpdated} ago
-        </Chip>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Chip
+            backgroundColor={statusColor}
+            style={{margin:4}}
+          >
+            <Avatar size={32} color={statusColor} backgroundColor={statusBGColor} icon={statusIcon} />
+            Status: {status}
+          </Chip>
+          <Chip
+            backgroundColor={blue300}
+            style={{margin:4}}
+          >
+            <Avatar size={32} color={blue300} backgroundColor={indigo900} icon={<SvgIconSchedule />} />
+            Last Update: {lastUpdated} ago
+          </Chip>
+        </div>
         <RaisedButton
             label="Schedule"
             primary={true}

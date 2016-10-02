@@ -16,7 +16,7 @@ export default class LocationModel {
 		this.lat = lat;
 		this.lng = lng;
 		this.updatedAt = null;
-		this.isActive = false;
+		this.isActive = null;
 	}
 	setActive(active) {
 		this.isActive = active;
@@ -30,13 +30,13 @@ export default class LocationModel {
 		this.store.maps.remove(this);
 	}
 
-	setLocation(lat,lng, updatedAt) {
+	setLocation(lat,lng, updatedAt, isActive) {
 		this.lng = parseFloat(lng);
 		this.lat = parseFloat(lat);
 		if(updatedAt){
 			this.updatedAt = this.timeSince(Date.parse(updatedAt));
-			console.log('set updatedAt='+updatedAt + ' timeSince='+this.updatedAt)
 		}
+		this.isActive = isActive;
 	}
 	setLat(lat) {
 		this.lat = lat
@@ -53,11 +53,8 @@ export default class LocationModel {
 		};
 	}
 	timeSince (date) {
-			console.log('type ='+typeof(date))
 	    var seconds = Math.floor((new Date() - date) / 1000);
-			console.log('seconds ='+seconds)
 	    var interval = Math.floor(seconds / 31536000);
-			console.log('intervel ='+interval)
 	    if (interval > 1) {
 	        return interval + " years";
 	    }

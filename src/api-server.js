@@ -200,6 +200,7 @@ apiRouter.post('/updateMyLocation', function(req, res) {
           }else{
             user.lat = lat ;
             user.lng = lng ;
+            user.isActive = true;
             user.save(function(err, user_res){
             if(err) {
                 res.status(500).send('Internal Server Error');
@@ -247,6 +248,8 @@ apiRouter.post('/updateMyActive', function(req, res) {
             });
           }else{
             user.isActive = isActive ;
+            // IDEA: update isAcive must not affect last update
+            user.updatedAt = user.updatedAt ;
             user.save(function(err, user_res){
             if(err) {
                 res.status(500).send('Internal Server Error');
