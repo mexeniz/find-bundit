@@ -26,6 +26,10 @@ const renderFullPage = () => {
 	<!doctype html>
 	<html lang="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta property="og:image" content="https://mmarcl.com/image/thumb" />
+		<meta property="og:title" content="Find Bundit" />
+		<meta property="og:url" content="mmarcl.com" />
+		<meta property="og:description" content="Location tracking application for graduates! Let's find their location and take photos with them." />
 		<head>
 			<link rel="icon" type="image/x-icon" href="/image/favicon.ico" />
 			<title>Mma - Graduation</title>
