@@ -179,7 +179,8 @@ apiRouter.post('/updateMyLocation', function(req, res) {
   console.log("token username="+username);
   console.log('client ip:' + req.headers.host);
   console.log('user-agent:' + req.headers['user-agent'])
-  console.log('get new location' + newLocation)
+  console.log('get new location')
+  console.log(newLocation)
   if ('lat' in newLocation && 'lng' in newLocation) {
     let lat = parseFloat(newLocation.lat)
     let lng = parseFloat(newLocation.lng)

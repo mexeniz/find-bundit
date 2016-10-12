@@ -27,8 +27,8 @@ class Map extends Component {
   const {lat, lng} = this.props.location
   const clientLat = this.props.clientLocation.lat
   const clientLng = this.props.clientLocation.lng
-  console.log('bundit= ' +lat + ' ' + lng)
-  console.log('client= ' +clientLat + ' ' + clientLng)
+  //console.log('bundit= ' +lat + ' ' + lng)
+  //console.log('client= ' +clientLat + ' ' + clientLng)
 
   let contents = [];
   if (lat >= 0 && lng >= 0){

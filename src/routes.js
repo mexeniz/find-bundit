@@ -27,10 +27,8 @@ export default () => {
         <Route path='home' component={Home} />
         <Route path='locator' component={LocatorContainer} onEnter={requireAuth} storage={userStore}/>
         <Route path='login' component={Login} storage={userStore}/>
-        <Route path='map' component={MapContainer} >
-          <IndexRoute component={MapContainer} />
-          <Route path='/:name' />
-        </Route>
+        <Route path='map/:name' component={MapContainer} />
+	<Route path='map' component={MapContainer} />
       </Route>
     </Router>
   )
