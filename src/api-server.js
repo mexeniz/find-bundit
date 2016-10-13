@@ -11,12 +11,15 @@ var Schema = mongoose.Schema;
 // set up a mongoose model
 var User = mongoose.model('User', new Schema({
   username: {type: String, unique: true, required: true},
+  name: {type: String, unique: true, required: true},
   password: {type : String, required: true},
   isActive: {type : Boolean, default: false},
   phoneNumber: String,
   email: String,
   lat: {type : Number, min: 0.0, default: 0.0},
-  lng: {type : Number, min: 0.0, default: 0.0}
+  lng: {type : Number, min: 0.0, default: 0.0},
+  friendList: [{type:'String'}],
+  profilePicture: String,
 },{timestamps: true}));
 
 const saltRounds = 10;
@@ -43,6 +46,8 @@ apiRouter.post('/register', function(req, res) {
       var user = new User({
         username: req.body.username,
         password: hash,
+        name: req.body.name,
+        friendList: [],
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
       });
@@ -57,7 +62,7 @@ apiRouter.post('/register', function(req, res) {
 
         console.log('Register User successfully');
 
-        var token = jwt.sign(user, config.secret, {
+        var token = jwt.sign(user.username , config.secret, {
           expiresIn: 86400 // expires in 24 hours
         });
 
@@ -274,4 +279,147 @@ apiRouter.post('/updateMyActive', function(req, res) {
     });
   }
 });
+// POST /updateProfilePicture
+// POST /updatePhoneNumber
+// POST /addFriend
+// GET /getFriendList
+apiRouter.post('/updateProfilePicture', function(req, res) {
+  var token = req.body.token;
+  var decoded = jwtDecode(token);
+  var username = decoded.username ;
+  if ('profilePicture' in req.body) {
+    var profilePicture = req.body.profilePicture ;
+    User.findOne({username : username},function(err,user) {
+        if (err) throw err;
+        else{
+          if(!user){
+              res.status(500).send('User not found');
+          }else{
+            user.profilePicture = profilePicture ;
+            // IDEA: update profilePicture must not affect last update
+            user.updatedAt = user.updatedAt ;
+            user.save(function(err, user_res){
+            if(err) {
+                res.status(500).send('Internal Server Error');
+                throw err;
+            }
+            if(!user_res) {
+                return res.end('No such user');
+            }else{
+              res.status(200).json({
+                success: true,
+                username: user_res.username,
+                profilePicture: user_res.profilePicture,
+              });
+            }
+            });
+          }
+        }
+      });
+    }else{
+        res.status(500).json({
+          error: 'Wrong body format'
+        });
+      }
+    });
+apiRouter.post('/updatePhoneNumber', function(req, res) {
+  var token = req.body.token;
+  var decoded = jwtDecode(token);
+  var username = decoded.username ;
+  if ('phoneNumber' in req.body) {
+    var phoneNumber = req.body.phoneNumber ;
+    User.findOne({username : username},function(err,user) {
+        if (err) throw err;
+        else{
+          if(!user){
+              res.status(500).send('User not found');
+          }else{
+            user.phoneNumber = phoneNumber ;
+            // IDEA: update phoneNumber must not affect last update
+            user.updatedAt = user.updatedAt ;
+            user.save(function(err, user_res){
+            if(err) {
+                res.status(500).send('Internal Server Error');
+                throw err;
+            }
+            if(!user_res) {
+                return res.end('No such user');
+            }else{
+              res.status(200).json({
+                success: true,
+                username: user_res.username,
+                phoneNumber: user_res.phoneNumber,
+              });
+            }
+            });
+          }
+        }
+      });
+    }else{
+        res.status(500).json({
+          error: 'Wrong body format'
+        });
+      }
+    });
+apiRouter.post('/addFriend', function(req, res) {
+  var token = req.body.token;
+  var decoded = jwtDecode(token);
+  var username = decoded.username ;
+  if ('friendName' in req.body) {
+    var friendName = req.body.friendName ;
+    User.findOne({username : username},function(err,user) {
+        if (err) throw err;
+        else{
+          if(!user){
+              res.status(500).send('User not found');
+          }else{
+            user.friendList.push(friendName);
+            user.save(function(err, user_res){
+            if(err) {
+                res.status(500).send('Internal Server Error');
+                throw err;
+            }
+            if(!user_res) {
+                return res.end('No such user');
+            }else{
+              res.status(200).json({
+                success: true,
+                username: user_res.username,
+                friendList: user_res.friendList,
+              });
+            }
+          });
+        }
+      }
+    });
+    }else{
+        res.status(500).json({
+          error: 'Wrong body format'
+        });
+      }
+    });
+apiRouter.post('/getFriendList', function(req, res) {
+  var token = req.body.token;
+  var decoded = jwtDecode(token);
+  var username = decoded.username ;
+  User.findOne({username : username},function(err,user) {
+      if (err) throw err;
+      else{
+        if(!user){
+            res.status(500).send('User not found');
+        }else{
+          if(err) {
+              res.status(500).send('Internal Server Error');
+              throw err;
+          }
+            res.status(200).json({
+              success: true,
+              username: user.username,
+              friendList: user.friendList,
+            });
+        }
+    }
+  });
+});
+
 export default apiRouter
