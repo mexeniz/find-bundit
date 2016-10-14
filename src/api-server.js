@@ -60,10 +60,9 @@ apiRouter.post('/register', function(req, res) {
           throw err;
         }
 
-        console.log('Register User successfully');
 
-        var token = jwt.sign(user.username , config.secret, {
-          expiresIn: 86400 // expires in 24 hours
+        var token = jwt.sign({ username :user.username} , config.secret, {
+          expiresIn: '24h' // expires in 24 hours
         });
 
         res.json({
