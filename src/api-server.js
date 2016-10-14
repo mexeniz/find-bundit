@@ -34,7 +34,7 @@ function parseJwt (token) {
 };
 // Insecured API
 apiRouter.post('/register', function(req, res) {
-  if( ! ('username' in req.body) || !( 'password' in req.body) ){
+  if( ! ('username' in req.body) || !( 'password' in req.body) || !('name' in req.body)){
     res.json({
       success: false,
       message: 'Bad request format'
