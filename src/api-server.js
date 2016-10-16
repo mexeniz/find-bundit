@@ -25,16 +25,44 @@ var User = mongoose.model('User', new Schema({
   profilePicture: String,
 },{timestamps: true}));
 
+const publicUserProfile = user => {
+  return {
+    username: user.username,
+    name: user.name,
+    phoneNumber: user.phoneNumber,
+    email: user.email,
+    picture: user.profilePicture,
+  }
+}
+
 const saltRounds = 10;
 
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
+
 function parseJwt (token) {
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace('-', '+').replace('_', '/');
   return JSON.parse(window.atob(base64));
 };
+
+function GetUserByUsername(username) {
+  return User
+          .findOne({ username })
+          .then(user => {
+            if(!user) throw `User: ${username} not found`;
+            // found user
+            return Promise.resolve(user);
+          });
+}
+
+function GetUserByToken(token) {
+  const decoded = jwtDecode(token);
+  const username = decoded.username ;
+  return GetUserByUsername(username);
+}
+
 // Insecured API
 apiRouter.post('/register', function(req, res) {
   if( ! ('username' in req.body) || !( 'password' in req.body) || !('name' in req.body)){
