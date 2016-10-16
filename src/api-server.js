@@ -391,23 +391,23 @@ apiRouter.post('/updatePhoneNumber', function(req, res) {
     });
   }
 });
+
 apiRouter.post('/addFriend', function(req, res) {
   var token = req.body.token;
   var decoded = jwtDecode(token);
   var username = decoded.username ;
   if ('friendName' in req.body) {
     var friendName = req.body.friendName ;
-    User
-    .findOne({username: username})
-    .then(function(user) {
-      if(!user)
-        throw 'User is not found';
+    GetUserByUsername(username)
+    .then(user => {
       if(user.friendList.indexOf(friendName) !== -1)
         throw 'Already friend';
       if(friendName === user.username)
         throw 'Cannot add yourself';
+
+      // find friend
       return Promise.all([user, User.findOne({username: friendName})])
-    }).spread(function(user, friend) {
+    }).spread((user, friend) => {
       if(!friend)
         throw "Friend's username doesn't exist";
 
@@ -415,7 +415,7 @@ apiRouter.post('/addFriend', function(req, res) {
         user.friendList.push(friend.username);
         return user.save();
       })
-    .then(function(user) {
+    .then(user => {
       res.status(200).json({
         success: true,
         username: user.username,
@@ -423,7 +423,7 @@ apiRouter.post('/addFriend', function(req, res) {
       });
       return
     })
-    .catch(function(err) {
+    .catch(err => {
       res.status(500).json({
         success: false,
         message: err,
