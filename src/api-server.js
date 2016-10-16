@@ -436,28 +436,75 @@ apiRouter.post('/addFriend', function(req, res) {
     });
   }
 });
-apiRouter.post('/getFriendList', function(req, res) {
-  var token = req.body.token;
-  var decoded = jwtDecode(token);
-  var username = decoded.username ;
-  User.findOne({username : username},function(err,user) {
-    if (err) throw err;
-    else{
-      if(!user){
-        res.status(500).send('User not found');
-      }else{
-        if(err) {
-          res.status(500).send('Internal Server Error');
-          throw err;
-        }
-        res.status(200).json({
-          success: true,
-          username: user.username,
-          friendList: user.friendList,
-        });
-      }
-    }
-  });
+
+apiRouter.get('/getFriendList', function(req, res) {
+  const token = req.query.token;
+  GetUserByToken(token)
+    .then(user => {
+      res.status(200).json({
+        success: true,
+        username: user.username,
+        friendList: user.friendList,
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        success: false,
+        message: err,
+      })
+    });
 });
+
+apiRouter.get('/getMyProfile', function(req, res) {
+  const token = req.query.token;
+  GetUserByToken(token)
+    .then(user => {
+      res.status(200).json({
+        success: true,
+        message: 'Successfully get user profile',
+        profile: publicUserProfile(user),
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        success: false,
+        message: err,
+      })
+    });
+});
+
+apiRouter.get('/getFriendProfile', function(req, res) {
+  const token = req.query.token;
+  const friendName = req.query.friendName;
+
+  if(!friendName) {
+    res.status(500).json({
+      error: 'Wrong body format'
+    });
+    return;
+  }
+
+  GetUserByToken(token)
+    .then(user => {
+      // check if really friend
+      if(user.friendList.indexOf(friendName) === -1) {
+        throw 'No friend with name: ' + friendName;
+      }
+      return GetUserByUsername(friendName);
+    })
+    .then(friend => {
+      res.status(200).json({
+        success: true,
+        message: 'Successfully get friend profile',
+        profile: publicUserProfile(friend),
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        success: false,
+        message: err,
+      })
+    })
+})
 
 export default apiRouter
