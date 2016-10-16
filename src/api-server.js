@@ -106,22 +106,22 @@ apiRouter.post('/register', function(req, res) {
   }
 
 });
-apiRouter.get('/getFriendLocation/:name', function(req, res, next) {
-  var name = req.params.name;
+apiRouter.get('/getFriendLocation/:username', function(req, res, next) {
+  var username = req.params.username;
   User.findOne({
-    username: name
+    username
   }, function(err, user) {
     if (err) throw err;
 
     if (!user) {
       res.json({
         success: false,
-        message: ('Not found user with name=' + name)
+        message: ('Not found user with username = ' + username)
       });
     } else if (user) {
       res.json({
         success: true,
-        message: ('Successfully get user\'s location name=' + name),
+        message: ('Successfully get user\'s location name=' + username),
         lat: user.lat,
         lng: user.lng,
         isActive: user.isActive,
@@ -396,20 +396,20 @@ apiRouter.post('/addFriend', function(req, res) {
   var token = req.body.token;
   var decoded = jwtDecode(token);
   var username = decoded.username ;
-  if ('friendName' in req.body) {
-    var friendName = req.body.friendName ;
+  if ('friendUsername' in req.body) {
+    const friendUsername = req.body.friendUsername ;
     GetUserByUsername(username)
     .then(user => {
-      if(user.friendList.indexOf(friendName) !== -1)
+      if(user.friendList.indexOf(friendUsername) !== -1)
         throw 'Already friend';
-      if(friendName === user.username)
+      if(friendUsername === user.username)
         throw 'Cannot add yourself';
 
       // find friend
-      return Promise.all([user, User.findOne({username: friendName})])
+      return Promise.all([user, User.findOne({username: friendUsername})])
     }).spread((user, friend) => {
       if(!friend)
-        throw "Friend's username doesn't exist";
+        throw `Username: ${friendUsername} doesn't exist`;
 
         // add to friend array
         user.friendList.push(friend.username);
@@ -475,9 +475,9 @@ apiRouter.get('/getMyProfile', function(req, res) {
 
 apiRouter.get('/getFriendProfile', function(req, res) {
   const token = req.query.token;
-  const friendName = req.query.friendName;
+  const friendUsername = req.query.friendUsername;
 
-  if(!friendName) {
+  if(!friendUsername) {
     res.status(500).json({
       error: 'Wrong body format'
     });
@@ -487,10 +487,10 @@ apiRouter.get('/getFriendProfile', function(req, res) {
   GetUserByToken(token)
     .then(user => {
       // check if really friend
-      if(user.friendList.indexOf(friendName) === -1) {
-        throw 'No friend with name: ' + friendName;
+      if(user.friendList.indexOf(friendUsername) === -1) {
+        throw 'No friend with name: ' + friendUsername;
       }
-      return GetUserByUsername(friendName);
+      return GetUserByUsername(friendUsername);
     })
     .then(friend => {
       res.status(200).json({
