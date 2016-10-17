@@ -11,7 +11,6 @@ var Schema = mongoose.Schema;
 // set up a mongoose model
 var User = mongoose.model('User', new Schema({
   username: {type: String, unique: true, required: true},
-  name: {type: String, unique: true, required: true},
   password: {type : String, required: true},
   isActive: {type : Boolean, default: false},
   phoneNumber: String,
@@ -46,7 +45,6 @@ apiRouter.post('/register', function(req, res) {
       var user = new User({
         username: req.body.username,
         password: hash,
-        name: req.body.name,
         friendList: [],
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
@@ -76,22 +74,22 @@ apiRouter.post('/register', function(req, res) {
   }
 
 });
-apiRouter.get('/getFriendLocation/:name', function(req, res, next) {
-  var name = req.params.name;
+apiRouter.get('/getFriendLocation/:username', function(req, res, next) {
+  var username = req.params.username;
   User.findOne({
-    username: name
+    username: username
   }, function(err, user) {
     if (err) throw err;
 
     if (!user) {
       res.json({
         success: false,
-        message: ('Not found user with name=' + name)
+        message: ('Not found user with name=' + username)
       });
     } else if (user) {
       res.json({
         success: true,
-        message: ('Successfully get user\'s location name=' + name),
+        message: ('Successfully get user\'s location username=' + username),
         lat: user.lat,
         lng: user.lng,
         isActive: user.isActive,
@@ -365,15 +363,15 @@ apiRouter.post('/addFriend', function(req, res) {
   var token = req.body.token;
   var decoded = jwtDecode(token);
   var username = decoded.username ;
-  if ('friendName' in req.body) {
-    var friendName = req.body.friendName ;
+  if ('friendUsername' in req.body) {
+    var friendUsername = req.body.friendUsername ;
     User.findOne({username : username},function(err,user) {
         if (err) throw err;
         else{
           if(!user){
               res.status(500).send('User not found');
           }else{
-            user.friendList.push(friendName);
+            user.friendList.push(friendUsername);
             user.save(function(err, user_res){
             if(err) {
                 res.status(500).send('Internal Server Error');
