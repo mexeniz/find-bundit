@@ -14,7 +14,6 @@ var Schema = mongoose.Schema;
 // set up a mongoose model
 var User = mongoose.model('User', new Schema({
   username: {type: String, unique: true, required: true},
-  name: {type: String, unique: true, required: true},
   password: {type : String, required: true},
   isActive: {type : Boolean, default: false},
   phoneNumber: String,
@@ -28,7 +27,6 @@ var User = mongoose.model('User', new Schema({
 const publicUserProfile = user => {
   return {
     username: user.username,
-    name: user.name,
     phoneNumber: user.phoneNumber,
     email: user.email,
     picture: user.profilePicture,
@@ -65,7 +63,8 @@ function GetUserByToken(token) {
 
 // Insecured API
 apiRouter.post('/register', function(req, res) {
-  if( ! ('username' in req.body) || !( 'password' in req.body) || !('name' in req.body)){
+  console.log(JSON.stringify(req.body));
+  if( ! ('username' in req.body) || !( 'password' in req.body)) {
     res.json({
       success: false,
       message: 'Bad request format'
@@ -77,7 +76,6 @@ apiRouter.post('/register', function(req, res) {
       var user = new User({
         username: req.body.username,
         password: hash,
-        name: req.body.name,
         friendList: [],
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
@@ -86,7 +84,7 @@ apiRouter.post('/register', function(req, res) {
         if (err){
           res.json({
             success: false,
-            message: 'duplicated user'
+            message: "Duplicate user.",
           });
           throw err;
         }
