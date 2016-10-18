@@ -33,6 +33,13 @@ const publicUserProfile = user => {
   }
 }
 
+const insecuredPublicUserProfile= user => {
+  return {
+    username: user.username,
+    name: user.name,
+    picture: user.profilePicture,
+  }
+}
 const saltRounds = 10;
 
 function isNumber(n) {
@@ -79,6 +86,7 @@ apiRouter.post('/register', function(req, res) {
         friendList: [],
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
+        profilePicture: ('/image/'+req.body.username+'.jpg')
       });
       user.save(function(err) {
         if (err){
@@ -107,7 +115,7 @@ apiRouter.post('/register', function(req, res) {
 apiRouter.get('/getFriendLocation/:username', function(req, res, next) {
   var username = req.params.username;
   User.findOne({
-    username
+    username: username
   }, function(err, user) {
     if (err) throw err;
 
@@ -119,7 +127,7 @@ apiRouter.get('/getFriendLocation/:username', function(req, res, next) {
     } else if (user) {
       res.json({
         success: true,
-        message: ('Successfully get user\'s location name=' + username),
+        message: ('Successfully get user\'s location username=' + username),
         lat: user.lat,
         lng: user.lng,
         isActive: user.isActive,
@@ -168,6 +176,31 @@ apiRouter.post('/login', function(req, res) {
     }
   });
 });
+apiRouter.get('/getUserProfile/:username', function(req, res) {
+  const username = req.params.username;
+
+  if(!username) {
+    res.status(500).json({
+      error: 'Wrong body format'
+    });
+    return;
+  }
+
+  GetUserByUsername(username)
+    .then(user => {
+      res.status(200).json({
+        success: true,
+        message: 'Successfully get user profile',
+        profile: insecuredPublicUserProfile(user),
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        success: false,
+        message: err,
+      })
+    })
+})
 // Middleware
 apiRouter.use(function(req, res, next) {
 
@@ -307,10 +340,6 @@ apiRouter.post('/updateMyActive', function(req, res) {
     });
   }
 });
-// POST /updateProfilePicture
-// POST /updatePhoneNumber
-// POST /addFriend
-// GET /getFriendList
 apiRouter.post('/updateProfilePicture', function(req, res) {
   var token = req.body.token;
   var decoded = jwtDecode(token);

@@ -62,7 +62,6 @@ class Header extends Component {
     const MexenizLink = (
       <a href='https://github.com/mexeniz' >@mexeniz</a>
     )
-    console.log((<FontIcon className="muidocs-icon-custom-github" color={blue500} />))
     return (
       <div className='nav'>
         <AppBar
@@ -81,8 +80,9 @@ class Header extends Component {
             onLeftIconButtonTouchTap={this.handleClose}
           />
             <MenuItem onTouchTap={this.redirectHome} leftIcon={<ActionHome />} >Home</MenuItem>
-            <MenuItem onTouchTap={this.redirectMap} leftIcon={<MapPlace />} >Map</MenuItem>
+            <MenuItem onTouchTap={this.redirectMap} leftIcon={<MapPlace />} >Mma's Map</MenuItem>
             <MenuItem leftIcon={<ActionFace />} >@Mexeniz</MenuItem>
+            <MenuItem leftIcon={<ActionFace />} >@Aunnnn</MenuItem>
           </Drawer>
       </div>
     )

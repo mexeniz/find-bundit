@@ -40,8 +40,12 @@ export default class Home extends Component {
 		return (
 			<div className="container" id="home" style={style}>
 				<div style={welcomeStyle}>
-	        <p style={{fontSize: "24px"}}>Get Mma's location and take photos with him :)</p>
-					<FlatButton onClick={this.onLocateClick.bind(this)} label="Locate Mma!"  primary={true} style={buttonStyle} />
+	        <p style={{fontSize: "24px"}}>Get Bundit's location and take photos with them :)</p>
+					<p style={{fontSize: "24px"}}>Go to bundit's page by </p>
+					<p style={{fontSize: "24px"}}>https://mmarcl.com/map/[bundit_username]</p>
+					<br></br>
+					<br></br>
+		      <p style={{fontSize: "18px"}}>This website is collaborated by @mexeniz and @aunnnn.</p>
 				</div>
 			</div>
 		)

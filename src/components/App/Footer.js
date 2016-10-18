@@ -30,12 +30,15 @@ export default class Footer extends Component {
     const MexenizLink = (
       <a href='https://github.com/mexeniz' style={{color: grey50}}>Mexeniz</a>
     )
+    const MeetiesLink = (
+      <a href='https://meeties.me/' style={{color: grey50}}>Meeties</a>
+    )
     //   <p>Get Mma's location and take photos with him :)</p>
     //   <p>Powered by {ReactLink} {MaterialUILink} {MobxLink}</p>
     //   <p>Created by {MexenizLink}</p>
     return (
       <div className='footer' style={footerStyle}>
-        <p>Powered by {ReactLink} {MaterialUILink} {MobxLink}</p>
+        <p>Powered by {ReactLink} {MaterialUILink} {MobxLink} {MeetiesLink}</p>
       </div>
     )
   }

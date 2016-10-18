@@ -33,7 +33,7 @@ const renderFullPage = () => {
 		<meta property="og:description" content="Location tracking application for graduates! Let's find their location and take photos with them." />
 		<head>
 			<link rel="icon" type="image/x-icon" href="/image/favicon.ico" />
-			<title>Find Bundit BETA 1.1</title>
+			<title>Find Bundit</title>
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWPkc97QJBhtdg6ZM8UgnOOkco3lgEXyw" ></script>
 		</head>
 		<body style="margin:0px;overflow=hidden;">
