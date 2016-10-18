@@ -28,6 +28,11 @@ class MapContainer extends Component {
     else
       this.friendUsername = 'mmarcl'
     this.setUserProfile = this.setUserProfile.bind(this)
+    this.redirectToHome = this.redirectToHome.bind(this)
+  }
+  redirectToHome () {
+    alert('User = '+this.friendUsername+' not found.')
+    this.props.history.push('/home')
   }
   handleLocationMessage (data) {
     this.props.store.locationStore.setLocation(data.lat, data.lng,data.updatedAt, data.isActive)
@@ -38,8 +43,16 @@ class MapContainer extends Component {
   }
   fetchUserProfile () {
     let setUserProfile = this.setUserProfile
+    let redirectToHome = this.redirectToHome
     this.serverRequest = $.get('/api/getUserProfile/'+this.friendUsername, (response) => {
       setUserProfile(response.profile)
+    });
+    this.serverRequest.error(function(jqXHR, textStatus, errorThrown) {
+      if (textStatus == 'timeout')
+        console.log('The server is not responding');
+      if (textStatus == 'error')
+        console.log(errorThrown);
+      redirectToHome()
     });
   }
   componentWillMount () {

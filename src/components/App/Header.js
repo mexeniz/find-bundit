@@ -80,8 +80,9 @@ class Header extends Component {
             onLeftIconButtonTouchTap={this.handleClose}
           />
             <MenuItem onTouchTap={this.redirectHome} leftIcon={<ActionHome />} >Home</MenuItem>
-            <MenuItem onTouchTap={this.redirectMap} leftIcon={<MapPlace />} >Map</MenuItem>
+            <MenuItem onTouchTap={this.redirectMap} leftIcon={<MapPlace />} >Mma's Map</MenuItem>
             <MenuItem leftIcon={<ActionFace />} >@Mexeniz</MenuItem>
+            <MenuItem leftIcon={<ActionFace />} >@Aunnnn</MenuItem>
           </Drawer>
       </div>
     )
