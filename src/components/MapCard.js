@@ -135,16 +135,7 @@ class MapCard extends Component {
             Last Update: {lastUpdated} ago
           </Chip>
         </div>
-        <RaisedButton
-            label="Schedule"
-            primary={true}
-            onTouchTap={this.handleExpand}
-            icon={<ActionEvent />}
-            style={{margin:"12px"}}
-          />
-        </CardActions>
-        <CardText expandable={true}>
-        </CardText>
+	</CardActions>
       </Card>
     )
   }

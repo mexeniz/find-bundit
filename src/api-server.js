@@ -14,6 +14,7 @@ var Schema = mongoose.Schema;
 // set up a mongoose model
 var User = mongoose.model('User', new Schema({
   username: {type: String, unique: true, required: true},
+  name: {type: String, unique: true, required: true},
   password: {type : String, required: true},
   isActive: {type : Boolean, default: false},
   phoneNumber: String,
