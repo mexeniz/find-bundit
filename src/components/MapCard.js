@@ -31,7 +31,10 @@ class MapCard extends Component {
     this.state = {
       expanded: false,
     };
-    this.avatarPath = baseUrl + '/image/'+this.props.name+'.jpg'
+    if ('name' in this.props)
+      this.avatarPath = baseUrl + '/image/'+this.props.name+'.jpg'
+    else
+      this.avatarPath = baseUrl + '/image/default_profile.jpg'
   }
   handleExpandChange = (expanded) => {
     this.setState({expanded: expanded});
