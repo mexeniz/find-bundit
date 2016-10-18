@@ -1,6 +1,6 @@
 {
   "name": "find-bundit",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Get Graduates' Location and Take a Photo with Them!!",
   "scripts": {
     "start": "node index.js",

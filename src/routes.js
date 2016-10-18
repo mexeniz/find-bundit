@@ -11,7 +11,6 @@ import jwtStore from 'react-jwt-store'
 
 export default () => {
   var userStore = jwtStore();
-  console.log(userStore)
   function requireAuth(nextState, replace) {
     console.log('current token = ' + userStore.getToken())
     if (!userStore.getToken()) {
@@ -28,7 +27,7 @@ export default () => {
         <Route path='locator' component={LocatorContainer} onEnter={requireAuth} storage={userStore}/>
         <Route path='login' component={Login} storage={userStore}/>
         <Route path='map/:name' component={MapContainer} />
-	<Route path='map' component={MapContainer} />
+	      <Route path='map' component={MapContainer} />
       </Route>
     </Router>
   )
