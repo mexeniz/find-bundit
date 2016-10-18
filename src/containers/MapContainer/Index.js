@@ -22,13 +22,25 @@ class MapContainer extends Component {
   constructor (props) {
     super(props)
     this.handleLocationMessage = this.handleLocationMessage.bind(this)
+    this.fetchUserProfile = this.fetchUserProfile.bind(this)
     if(this.props.params.name)
-      this.name = this.props.params.name
+      this.friendUsername = this.props.params.name
     else
-      this.name = 'mmarcl'
+      this.friendUsername = 'mmarcl'
+    this.setUserProfile = this.setUserProfile.bind(this)
   }
   handleLocationMessage (data) {
     this.props.store.locationStore.setLocation(data.lat, data.lng,data.updatedAt, data.isActive)
+  }
+  setUserProfile (profile) {
+    this.props.store.locationStore.location.setName(profile.name)
+    this.props.store.locationStore.location.setPicture(profile.picture)
+  }
+  fetchUserProfile () {
+    let setUserProfile = this.setUserProfile
+    this.serverRequest = $.get('/api/getUserProfile/'+this.friendUsername, (response) => {
+      setUserProfile(response.profile)
+    });
   }
   componentWillMount () {
 
@@ -51,7 +63,7 @@ class MapContainer extends Component {
       }, locationInterval);
     // get first location from host
     let handleLocationMessage = this.handleLocationMessage
-    this.serverRequest = $.get('/api/getFriendLocation/'+this.name, (response) => {
+    this.serverRequest = $.get('/api/getFriendLocation/'+this.friendUsername, (response) => {
       handleLocationMessage({
         lat: response.lat,
         lng: response.lng,
@@ -61,7 +73,7 @@ class MapContainer extends Component {
     });
     // automatically get locaiton
     setInterval(() => {
-      this.serverRequest = $.get('/api/getFriendLocation/'+this.name, (response) => {
+      this.serverRequest = $.get('/api/getFriendLocation/'+this.friendUsername, (response) => {
         handleLocationMessage({
           lat: response.lat,
           lng: response.lng,
@@ -70,12 +82,13 @@ class MapContainer extends Component {
         })
       })
     }, locationInterval);
+    this.fetchUserProfile();
   }
 
   render () {
     return (
       <Paper zDepth={2} style={paperStyle}>
-        <MapCard location={this.props.store.locationStore.location} name={this.name}/>
+        <MapCard location={this.props.store.locationStore.location} />
         <Map location={this.props.store.locationStore.location} clientLocation={this.props.store.locationStore.clientLocation}/>
       </Paper>
     );

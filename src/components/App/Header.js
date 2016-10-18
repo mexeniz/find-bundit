@@ -62,7 +62,6 @@ class Header extends Component {
     const MexenizLink = (
       <a href='https://github.com/mexeniz' >@mexeniz</a>
     )
-    console.log((<FontIcon className="muidocs-icon-custom-github" color={blue500} />))
     return (
       <div className='nav'>
         <AppBar

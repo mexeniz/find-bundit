@@ -35,6 +35,13 @@ const publicUserProfile = user => {
   }
 }
 
+const insecuredPublicUserProfile= user => {
+  return {
+    username: user.username,
+    name: user.name,
+    picture: user.profilePicture,
+  }
+}
 const saltRounds = 10;
 
 function isNumber(n) {
@@ -81,6 +88,7 @@ apiRouter.post('/register', function(req, res) {
         friendList: [],
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
+        profilePicture: ('/image/'+req.body.username+'.jpg')
       });
       user.save(function(err) {
         if (err){
@@ -171,7 +179,7 @@ apiRouter.post('/login', function(req, res) {
   });
 });
 apiRouter.get('/getUserProfile/:username', function(req, res) {
-  const var username = req.params.username;
+  const username = req.params.username;
 
   if(!username) {
     res.status(500).json({
@@ -185,7 +193,7 @@ apiRouter.get('/getUserProfile/:username', function(req, res) {
       res.status(200).json({
         success: true,
         message: 'Successfully get user profile',
-        profile: publicUserProfile(user),
+        profile: insecuredPublicUserProfile(user),
       });
     })
     .catch(err => {
