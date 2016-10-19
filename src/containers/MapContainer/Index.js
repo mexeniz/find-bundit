@@ -38,7 +38,7 @@ class MapContainer extends Component {
     this.props.store.locationStore.setLocation(data.lat, data.lng,data.updatedAt, data.isActive)
   }
   setUserProfile (profile) {
-    this.props.store.locationStore.location.setName(profile.name)
+    this.props.store.locationStore.location.setName(profile.username)
     this.props.store.locationStore.location.setPicture(profile.picture)
   }
   fetchUserProfile () {
