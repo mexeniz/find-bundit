@@ -14,7 +14,7 @@ var Schema = mongoose.Schema;
 // set up a mongoose model
 var User = mongoose.model('User', new Schema({
   username: {type: String, unique: true, required: true},
-  name: {type: String, unique: true, required: true},
+  // name: {type: String, unique: true, required: true},
   password: {type : String, required: true},
   isActive: {type : Boolean, default: false},
   phoneNumber: String,
@@ -28,7 +28,7 @@ var User = mongoose.model('User', new Schema({
 const publicUserProfile = user => {
   return {
     username: user.username,
-    name: user.name,
+    // name: user.name,
     phoneNumber: user.phoneNumber,
     email: user.email,
     picture: user.profilePicture,
@@ -38,7 +38,7 @@ const publicUserProfile = user => {
 const insecuredPublicUserProfile= user => {
   return {
     username: user.username,
-    name: user.name,
+    // name: user.name,
     picture: user.profilePicture,
   }
 }
@@ -72,7 +72,8 @@ function GetUserByToken(token) {
 
 // Insecured API
 apiRouter.post('/register', function(req, res) {
-  if( ! ('username' in req.body) || !( 'password' in req.body) || !('name' in req.body)){
+  console.log(JSON.stringify(req.body));
+  if( ! ('username' in req.body) || !( 'password' in req.body)) {
     res.json({
       success: false,
       message: 'Bad request format'
@@ -87,13 +88,14 @@ apiRouter.post('/register', function(req, res) {
         friendList: [],
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
-        profilePicture: ('/image/'+req.body.username+'.jpg')
+        // profilePicture: req.body('/image/'+req.body.username+'.jpg'),
+        profilePicture: req.body.profilePicture,
       });
       user.save(function(err) {
         if (err){
           res.json({
             success: false,
-            message: 'duplicated user'
+            message: "Duplicate user.",
           });
           throw err;
         }
@@ -441,13 +443,12 @@ apiRouter.post('/addFriend', function(req, res) {
 
         // add to friend array
         user.friendList.push(friend.username);
-        return user.save();
+        return Promise.all([user.save(), friend]);
       })
-    .then(user => {
+    .spread((user, friend) => {
       res.status(200).json({
         success: true,
-        username: user.username,
-        friendList: user.friendList,
+        profile: publicUserProfile(friend),
       });
       return
     })
