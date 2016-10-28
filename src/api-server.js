@@ -118,7 +118,8 @@ apiRouter.post('/register', function(req, res) {
       user.save(function(err) {
         if (err) {
           res.status(500).json({
-            error: err
+            success: false,
+            message: err
           });
           throw err;
         }
@@ -147,7 +148,8 @@ apiRouter.get('/getFriendLocation/:username', function(req, res, next) {
   }, function(err, user) {
     if (err) {
       res.status(500).json({
-        error: err
+        success: false,
+        message: err
       });
       throw err;
     }
@@ -177,7 +179,8 @@ apiRouter.post('/login', function(req, res) {
 
     if (err) {
       res.status(500).json({
-        error: err
+        success: false,
+        message: err
       });
       throw err;
     }
@@ -253,7 +256,8 @@ apiRouter.use(function(req, res, next) {
     jwt.verify(token, config.secret, function(err, decoded) {
       if (err) {
         res.status(500).json({
-          error: err
+          success: false,
+          message: err
         });
         throw err;
       } else {
@@ -300,7 +304,8 @@ apiRouter.post('/updateMyLocation', function(req, res) {
       }, function(err, user) {
         if (err) {
           res.status(500).json({
-            error: err
+            success: false,
+            message: err
           });
           throw err;
         } else {
@@ -315,7 +320,8 @@ apiRouter.post('/updateMyLocation', function(req, res) {
             user.save(function(err, user_res) {
               if (err) {
                 res.status(500).json({
-                  error: err
+                  success: false,
+                  message: err
                 });
                 throw err;
               }
@@ -336,12 +342,14 @@ apiRouter.post('/updateMyLocation', function(req, res) {
       })
     } else {
       res.status(500).json({
-        error: 'Numeric conversion failed'
+        success: false,
+        message: 'Numeric conversion failed'
       });
     }
   } else {
     res.status(500).json({
-      error: 'Wrong body format'
+      success: false,
+      message: 'Wrong body format'
     });
   }
 });
@@ -356,7 +364,8 @@ apiRouter.post('/updateMyActive', function(req, res) {
     }, function(err, user) {
       if (err) {
         res.status(500).json({
-          error: err
+          success: false,
+          message: err
         });
         throw err;
       } else {
@@ -389,7 +398,8 @@ apiRouter.post('/updateMyActive', function(req, res) {
     });
   } else {
     res.status(500).json({
-      error: 'Wrong body format'
+      success: false,
+      message: 'Wrong body format'
     });
   }
 });
@@ -404,7 +414,8 @@ apiRouter.post('/updateProfilePicture', function(req, res) {
     }, function(err, user) {
       if (err) {
         res.status(500).json({
-          error: err
+          success: false,
+          message: err
         });
       } else {
         if (!user) {
@@ -415,7 +426,10 @@ apiRouter.post('/updateProfilePicture', function(req, res) {
           user.updatedAt = user.updatedAt;
           user.save(function(err, user_res) {
             if (err) {
-              res.status(500).send('Internal Server Error');
+              res.status(500).json({
+                success: false,
+                message: err
+              });
               throw err;
             }
             if (!user_res) {
@@ -448,7 +462,8 @@ apiRouter.post('/updatePhoneNumber', function(req, res) {
     }, function(err, user) {
       if (err) {
         res.status(500).json({
-          error: err
+          success: false,
+          message: err
         });
         throw err;
       } else {
@@ -478,7 +493,8 @@ apiRouter.post('/updatePhoneNumber', function(req, res) {
     });
   } else {
     res.status(500).json({
-      error: 'Wrong body format'
+      success : false,
+      message: 'Wrong body format'
     });
   }
 });
@@ -571,7 +587,8 @@ apiRouter.get('/getFriendProfile', function(req, res) {
 
   if (!friendUsername) {
     res.status(500).json({
-      error: 'Wrong body format'
+      success: false,
+      message: 'Wrong body format'
     });
     return;
   }
