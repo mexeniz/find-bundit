@@ -117,11 +117,21 @@ apiRouter.post('/register', function(req, res) {
       });
       user.save(function(err) {
         if (err) {
-          res.status(500).json({
-            success: false,
-            message: err
-          });
-          throw err;
+
+        	// if duplicate, print nicer message.
+        	if (err.code === 11000) {
+        		res.status(500).json({
+        			success: false,
+        			message: `Username '${req.body.username}' is already taken.`
+        		})
+        	} else {
+        		// unknown error
+	          res.status(500).json({
+	            success: false,
+	            message: err.message
+	          });
+	          throw err;
+        	}
         }
 
 
