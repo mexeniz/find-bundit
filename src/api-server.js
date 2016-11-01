@@ -4,6 +4,7 @@ import config from '../config'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import jwtDecode from 'jwt-decode'
+import _ from 'lodash'
 
 mongoose.Promise = require('bluebird');
 
@@ -117,11 +118,21 @@ apiRouter.post('/register', function(req, res) {
       });
       user.save(function(err) {
         if (err) {
-          res.status(500).json({
-            success: false,
-            message: err
-          });
-          throw err;
+
+        	// if duplicate, print nicer message.
+        	if (err.code === 11000) {
+        		res.status(500).json({
+        			success: false,
+        			message: `Username '${req.body.username}' is already taken.`
+        		})
+        	} else {
+        		// unknown error
+	          res.status(500).json({
+	            success: false,
+	            message: err.message
+	          });
+	          throw err;
+        	}
         }
 
 
@@ -615,5 +626,31 @@ apiRouter.get('/getFriendProfile', function(req, res) {
       })
     })
 })
+
+apiRouter.post('/exit', function(req, res) {
+  const token = req.body.token;
+  GetUserByToken(token)
+    .then(user => {
+    	user.remove(function(err) {
+        if(err) {
+          res.status(500).json({
+            success: false,
+            message: err,
+          })
+        } else {
+          res.status(200).json({
+              success: true,
+              message: 'Successfully exit'
+          })
+        }
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        success: false,
+        message: err,
+      })
+    })
+});
 
 export default apiRouter
