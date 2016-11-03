@@ -304,7 +304,7 @@ apiRouter.post('/updateMyLocation', function(req, res) {
   if ('lat' in newLocation && 'lng' in newLocation) {
     let lat = parseFloat(newLocation.lat)
     let lng = parseFloat(newLocation.lng)
-    if (isNumber(lat) && isNumber(lng) && lat >= -90.0 && lat <= 90.0 && lng >= -90 && lng <= 90) {
+    if (isNumber(lat) && isNumber(lng) && lat >= -90.0 && lat <= 90.0 && lng >= -180 && lng <= 180) {
       // Object.assign(myLocation, {
       //   lat: lat,
       //   lng: lng
