@@ -32,12 +32,14 @@ var User = mongoose.model('User', new Schema({
   email: String,
   lat: {
     type: Number,
-    min: 0.0,
+    min: -90.0,
+    max: 90,
     default: 0.0
   },
   lng: {
     type: Number,
-    min: 0.0,
+    min: -180,
+    max: 180,
     default: 0.0
   },
   friendList: [{
