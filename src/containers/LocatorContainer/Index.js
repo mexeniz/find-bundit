@@ -10,6 +10,8 @@ class LocatorContainer extends Component {
   constructor (props) {
     super(props)
     this.onRefreshClickHandler = this.onRefreshClickHandler.bind(this)
+    this.onActiveClickHandler = this.onActiveClickHandler.bind(this)
+    this.onInactiveClickHandler = this.onInactiveClickHandler.bind(this)
     this.sendLocation = this.sendLocation.bind(this)
     this.refreshLocation = this.refreshLocation.bind(this)
     this.userStore = this.props.route.storage;
@@ -29,6 +31,42 @@ class LocatorContainer extends Component {
   }
   onRefreshClickHandler () {
     this.refreshLocation ()
+  }
+  onActiveClickHandler () {
+    var data = {
+      isActive : true,
+      token: this.userStore.getToken()
+    }
+    $.ajax
+    ({
+        type: "POST",
+        url: '/api/updateMyActive',
+        processData: false,
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+          console.log(data)
+          console.log("Successfully set active");
+        }
+    })
+  }
+  onInactiveClickHandler () {
+    var data = {
+      isActive : false,
+      token: this.userStore.getToken()
+    }
+    $.ajax
+    ({
+        type: "POST",
+        url: '/api/updateMyActive',
+        processData: false,
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+          console.log(data)
+          console.log("Successfully set inactive");
+        }
+    })
   }
   sendLocation (location) {
     // add token to request body
@@ -57,7 +95,12 @@ class LocatorContainer extends Component {
 
   render () {
     return (
-      <Locator location={this.props.store.locationStore.location} onRefreshClick={this.onRefreshClickHandler}/>
+      <Locator
+        location={this.props.store.locationStore.location}
+        onRefreshClick={this.onRefreshClickHandler}
+        onActiveClick={this.onActiveClickHandler}
+        onInactiveClick={this.onInactiveClickHandler}
+        />
     );
   }
 }

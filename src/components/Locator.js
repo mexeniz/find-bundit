@@ -15,6 +15,8 @@ class Locator extends Component {
           <h1>Latitude = {this.props.location.lat.toPrecision(9)}</h1>
           <h1>Longitude = {this.props.location.lng.toPrecision(9)}</h1>
           <RaisedButton label="Refresh" onClick={this.props.onRefreshClick}  primary={true} style={{margin : "12px"}} />
+          <RaisedButton label="Set Active" onClick={this.props.onActiveClick}  primary={true} style={{margin : "12px"}} />
+          <RaisedButton label="Set Inactive" onClick={this.props.onInactiveClick}  primary={true} style={{margin : "12px"}} />
         </div>
     )
   }

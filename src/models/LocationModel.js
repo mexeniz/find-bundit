@@ -4,6 +4,7 @@ export default class LocationModel {
 	store;
 	id;
   @observable name;
+  @observable picture;
 	@observable lat;
 	@observable lng;
 	@observable updatedAt;
@@ -12,6 +13,7 @@ export default class LocationModel {
 	constructor (store,name, id, lat, lng) {
 		this.store = store;
 		this.id = id;
+		this.picture = '/image/default_profile.png';
 		this.name = name;
 		this.lat = lat;
 		this.lng = lng;
@@ -21,7 +23,9 @@ export default class LocationModel {
 	setActive(active) {
 		this.isActive = active;
 	}
-
+	setPicture (picture) {
+		this.picture = picture;
+	}
 	setName(name) {
 		this.name = name;
 	}

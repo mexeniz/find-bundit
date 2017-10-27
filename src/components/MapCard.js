@@ -31,7 +31,6 @@ class MapCard extends Component {
     this.state = {
       expanded: false,
     };
-    this.avatarPath = baseUrl + '/image/'+this.props.name+'.jpg'
   }
   handleExpandChange = (expanded) => {
     this.setState({expanded: expanded});
@@ -40,6 +39,33 @@ class MapCard extends Component {
     this.setState({expanded: !this.state.expanded});
   };
   render () {
+    /*
+    <TableBody displayRowCheckbox={false}>
+      <TableRow>
+       <TableRowColumn>3/10/2559</TableRowColumn>
+        <TableRowColumn>1st Rehearsal Day</TableRowColumn>
+        <TableRowColumn>N/A</TableRowColumn>
+      </TableRow>
+      <TableRow>
+        <TableRowColumn>8/10/2559</TableRowColumn>
+        <TableRowColumn>2nd Rehearsal Day</TableRowColumn>
+        <TableRowColumn>8.00 AM - 11.00 AM</TableRowColumn>
+      </TableRow>
+      <TableRow>
+        <TableRowColumn>20/10/2559</TableRowColumn>
+        <TableRowColumn>Commencement Day</TableRowColumn>
+        <TableRowColumn>1.00 PM - 6.00 PM</TableRowColumn>
+      </TableRow>
+    </TableBody>
+     */
+
+    var avatarPath;
+    if (this.props.location.picture.includes("http://") || this.props.location.picture.includes("https://") ){
+      avatarPath = this.props.location.picture
+    }
+    else {
+      avatarPath = baseUrl + this.props.location.picture
+    }
     const schedule = (
       <Table>
       <TableHeader
@@ -53,29 +79,13 @@ class MapCard extends Component {
           <TableHeaderColumn>Photo session</TableHeaderColumn>
         </TableRow>
       </TableHeader>
-      <TableBody displayRowCheckbox={false}>
-        <TableRow>
-         <TableRowColumn>3/10/2559</TableRowColumn>
-          <TableRowColumn>1st Rehearsal Day</TableRowColumn>
-          <TableRowColumn>N/A</TableRowColumn>
-        </TableRow>
-        <TableRow>
-          <TableRowColumn>8/10/2559</TableRowColumn>
-          <TableRowColumn>2nd Rehearsal Day</TableRowColumn>
-          <TableRowColumn>8.00 AM - 11.00 AM</TableRowColumn>
-        </TableRow>
-        <TableRow>
-          <TableRowColumn>20/10/2559</TableRowColumn>
-          <TableRowColumn>Commencement Day</TableRowColumn>
-          <TableRowColumn>1.00 PM - 6.00 PM</TableRowColumn>
-        </TableRow>
-      </TableBody>
     </Table>
     );
     var lastUpdated = 'N/A'
     if(this.props.location.updatedAt != null){
       lastUpdated = this.props.location.updatedAt
     }
+    const titleText = this.props.location.name+'\'s location'
     const subtitleText = 'My location refreshes every ' + REFRESH_INTERVAL+ ' sec.'
 
     // compose status Chip
@@ -102,8 +112,8 @@ class MapCard extends Component {
     return (
       <Card style={style} expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
         <CardHeader
-          avatar= {this.avatarPath}
-          title='Check my location from the map below. :)'
+          avatar= {avatarPath}
+          title={titleText}
           subtitle={subtitleText}
           actAsExpander={true}
           showExpandableButton={true}
@@ -125,27 +135,9 @@ class MapCard extends Component {
             Last Update: {lastUpdated} ago
           </Chip>
         </div>
-        <RaisedButton
-            label="Schedule"
-            primary={true}
-            onTouchTap={this.handleExpand}
-            icon={<ActionEvent />}
-            style={{margin:"12px"}}
-          />
-        </CardActions>
-        <CardText expandable={true}>
-          {schedule}
-        </CardText>
+	</CardActions>
       </Card>
     )
   }
 }
 export default MapCard
-
-// <Chip
-//   backgroundColor={blue300}
-//   style={{margin:4}}
-// >
-//   <Avatar size={32} color={blue300} backgroundColor={indigo900} icon={<SvgIconSchedule />} />
-//   Last Update: {lastUpdated}
-// </Chip>

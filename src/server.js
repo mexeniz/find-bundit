@@ -26,9 +26,14 @@ const renderFullPage = () => {
 	<!doctype html>
 	<html lang="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta property="og:image:url" content="http://mmarcl.com/image/thumb.jpg" />
+		<meta property="og:image:secure_url" content="https://mmarcl.com/image/thumb.jpg" />
+		<meta property="og:title" content="Find Bundit" />
+		<meta property="og:url" content="mmarcl.com" />
+		<meta property="og:description" content="Location tracking application for graduates! Let's find their location and take photos with them." />
 		<head>
 			<link rel="icon" type="image/x-icon" href="/image/favicon.ico" />
-			<title>Mma - Graduation</title>
+			<title>Find Bundit</title>
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWPkc97QJBhtdg6ZM8UgnOOkco3lgEXyw" ></script>
 		</head>
 		<body style="margin:0px;overflow=hidden;">
